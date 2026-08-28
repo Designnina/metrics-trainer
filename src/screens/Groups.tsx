@@ -19,19 +19,19 @@ export function Groups() {
           const mastered = ms.filter(m => (state.progress[m.id]?.level ?? 0) >= 5).length;
           return (
             <div key={f.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-              <Link to={`/library?f=${f.id}`} style={{ display: 'block', padding: 'var(--space-5)', background: f.color, color: '#fff' }}>
+              <Link to={`/library?f=${f.id}`} style={{ display: 'block', padding: 'var(--sp-5)', background: 'var(--surface-2)', borderBottom: '1px solid var(--rule)' }}>
                 <div className="row-flex">
                   <div>
                     <div style={{ fontFamily: 'var(--font-mono)', letterSpacing: '.1em', fontSize: 13, fontWeight: 600 }}>{f.title}</div>
-                    <div style={{ fontSize: 14, marginTop: 4, opacity: .85 }}>{f.subtitle}</div>
+                    <div style={{ fontSize: 14, marginTop: 4, color: 'var(--ink-2)' }}>{f.subtitle}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: 22, fontWeight: 700 }}>{ms.length}</div>
-                    <div className="tiny" style={{ opacity: .8 }}>метрик</div>
+                    <div className="tiny" style={{ color: 'var(--ink-3)' }}>метрик</div>
                   </div>
                 </div>
               </Link>
-              <div style={{ padding: '14px 20px 18px', borderTop: '1px solid var(--line)' }}>
+              <div style={{ padding: '14px 20px 18px' }}>
                 <div style={{ fontSize: 13, color: 'var(--ink-2)', marginBottom: 8 }}>{f.description}</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {cats.map(c => (

@@ -1,83 +1,58 @@
-import { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import type { Metric } from '../types';
 import { categoryById } from '../data/taxonomy';
 import { metricName } from '../data/metrics';
 
-const cardCss = `
-.flip-stage { perspective: 1400px; width: 100%; min-height: 340px; }
-.flip-card { position: relative; width: 100%; min-height: 340px; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.2,.7,.3,1); }
-.flip-card.flipped { transform: rotateY(180deg); }
-.flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; }
-.flip-back { transform: rotateY(180deg); }
-@media (hover:hover) {
-  .flip-card { transition-duration: .45s; }
-}
-`;
-
-export function FlipCard({ metric }: { metric: Metric }) {
-  const [flipped, setFlipped] = useState(false);
+export function FlipCard({ metric, flipped, onFlip }: { metric: Metric; flipped: boolean; onFlip: (v: boolean) => void }) {
   const cat = categoryById[metric.categoryId];
-  const confused = metric.confusedWith.slice(0, 3);
+  const reduce = useReducedMotion();
+  const confused = metric.confusedWith.slice(0, 4);
 
   return (
-    <div className="flip-stage" style={{ marginBottom: 16 }}>
-      <style>{cardCss}</style>
-      <div
-        className={`flip-card ${flipped ? 'flipped' : ''}`}
-        role="button"
-        aria-pressed={flipped}
-        tabIndex={0}
-        onClick={() => setFlipped(f => !f)}
-        onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setFlipped(f => !f); } }}
-        aria-label={flipped ? 'Показать лицевую сторону' : 'Перевернуть карточку'}
-      >
-        <div className="flip-face card" style={{ padding: 'var(--space-6)' }}>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+    <motion.button
+      type="button"
+      className="flip-card"
+      onClick={() => onFlip(!flipped)}
+      onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); onFlip(!flipped); } }}
+      animate={{ rotateY: flipped ? 180 : 0 }}
+      transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+      aria-pressed={flipped}
+      aria-label={flipped ? 'Показать лицевую сторону' : 'Перевернуть и посмотреть ответ'}
+      title="Нажми, чтобы перевернуть"
+    >
+      <div className="flip-inner">
+        {/* FRONT */}
+        <div className="flip-face flip-front card" style={{ padding: 'var(--sp-6)' }}>
+          <div className="flip-top">
             <span className="chip chip-dark">{metric.name.toUpperCase()}</span>
             <span className="chip">{cat.title}</span>
           </div>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8, padding: '24px 0' }}>
+          <div className="flip-mid">
             <div className="eyebrow">На какой вопрос отвечает</div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 22, lineHeight: 1.3, fontWeight: 600 }}>
-              «{metric.tagline}»
-            </div>
+            <div className="flip-quote">«{metric.tagline}»</div>
           </div>
-          <div style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
-            Tap to reveal ↓
-          </div>
+          <div className="flip-hint">Нажми — перевернуть</div>
         </div>
 
-        <div className="flip-face flip-back card" style={{ padding: 'var(--space-5)', background: 'var(--bg-soft)', border: 'none' }}>
-          <div style={{ maxHeight: '100%', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div>
-              <div className="eyebrow" style={{ marginBottom: 2 }}>Что это</div>
-              <div style={{ fontSize: 16, fontWeight: 600 }}>{metric.definition}</div>
-            </div>
-            {metric.formula && (
-              <div>
-                <div className="eyebrow" style={{ marginBottom: 4 }}>Формула</div>
-                <div className="mono" style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 10, padding: '10px 12px' }}>{metric.formula}</div>
-              </div>
-            )}
-            {metric.numericExample && (
-              <div>
-                <div className="eyebrow" style={{ marginBottom: 4 }}>Пример</div>
-                <div style={{ fontSize: 14 }}>{metric.numericExample.label} <strong>{metric.numericExample.result}</strong></div>
-              </div>
-            )}
-            <div>
-              <div className="eyebrow" style={{ marginBottom: 4 }}>Кейс</div>
-              <div style={{ fontSize: 13.5, lineHeight: 1.55 }}>{metric.caseStudy.text}</div>
-            </div>
-            <div>
-              <div className="eyebrow" style={{ marginBottom: 4 }}>Не путать с</div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {confused.map(id => <span key={id} className="chip">{metricName(id)}</span>)}
+        {/* BACK */}
+        <div className="flip-face flip-back">
+          <div className="card flip-back-card">
+            <div className="flip-scroll">
+              <div><div className="eyebrow">Что это</div><div className="flip-def">{metric.definition}</div></div>
+              {metric.formula && (
+                <div><div className="eyebrow">Формула</div><div className="mono flip-formula">{metric.formula}</div></div>
+              )}
+              {metric.numericExample && (
+                <div><div className="eyebrow">Пример</div><div className="flip-ex">{metric.numericExample.label} <strong>{metric.numericExample.result}</strong></div></div>
+              )}
+              <div><div className="eyebrow">Кейс</div><div className="flip-ex">{metric.caseStudy.text}</div></div>
+              <div><div className="eyebrow">Не путать с</div>
+                <div className="flip-chips">{confused.map(id => <span key={id} className="chip">{metricName(id)}</span>)}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.button>
   );
 }

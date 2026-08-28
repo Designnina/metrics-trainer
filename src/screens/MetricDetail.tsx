@@ -26,7 +26,7 @@ export function MetricDetail() {
         <span className="chip">{cat.title}</span>
       </div>
       <div className="h1">{m.name}</div>
-      <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 18, marginBottom: 20, fontWeight: 600 }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 18, marginBottom: 20, fontWeight: 600, letterSpacing: '-0.01em' }}>
         «{m.tagline}»
       </div>
 
@@ -35,7 +35,7 @@ export function MetricDetail() {
         <Section label="Что измеряет">{m.measures}</Section>
         {m.formula && (
           <Section label="Формула">
-            <div className="mono" style={{ background: 'var(--bg-soft)', borderRadius: 10, padding: '12px 14px' }}>{m.formula}</div>
+            <div className="mono" style={{ background: 'var(--surface-2)', border: '1px solid var(--rule)', borderRadius: 10, padding: '12px 14px' }}>{m.formula}</div>
             {m.formulaParts && Object.keys(m.formulaParts).length > 0 && (
               <ul style={{ margin: '8px 0 0 18px', fontSize: 13, color: 'var(--ink-2)' }}>
                 {Object.entries(m.formulaParts).map(([k, v]) => <li key={k}><strong>{k}</strong> — {v}</li>)}

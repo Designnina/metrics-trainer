@@ -35,16 +35,12 @@ export function Library() {
       </div>
 
       <input
-        className="search"
-        value={q}
-        onChange={e => setQ(e.target.value)}
-        placeholder="Поиск: conversion, retention, nps…"
-        aria-label="Поиск метрик"
-        style={{
-          width: '100%', border: '1px solid var(--line)', borderRadius: 12, padding: '13px 16px',
-          fontSize: 15, background: 'var(--bg)', marginBottom: 16,
-        }}
-      />
+          className="search"
+          value={q}
+          onChange={e => setQ(e.target.value)}
+          placeholder="Поиск: conversion, retention, nps…"
+          aria-label="Поиск метрик"
+        />
 
       <div className="list">
         {list.map(m => {

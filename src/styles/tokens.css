@@ -1,44 +1,116 @@
+@import "@fontsource/albert-sans/latin-400.css";
+@import "@fontsource/albert-sans/latin-500.css";
+@import "@fontsource/albert-sans/latin-600.css";
+@import "@fontsource/albert-sans/latin-700.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f5f5f5;
-  --bg-strong: #111111;
-  --line: #e4e4e4;
-  --ink: #111111;
-  --ink-2: #555555;
-  --ink-3: #8a8a8a;
-  --accent: #000000;
-  --ok: #0a5c36;
-  --err: #a12222;
-  --radius: 20px;
-  --radius-sm: 12px;
-  --font: "Instrument Sans", system-ui, -apple-system, sans-serif;
-  --font-display: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --font-serif: "Newsreader", Georgia, serif;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --tabbar-h: 68px;
-  --max-w: 480px;
+  /* Type */
+  --font-sans: "Albert Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Type scale (16px root) */
+  --t-11: 0.6875rem;
+  --t-12: 0.75rem;
+  --t-13: 0.8125rem;
+  --t-14: 0.875rem;
+  --t-16: 1rem;
+  --t-18: 1.125rem;
+  --t-20: 1.25rem;
+  --t-24: 1.5rem;
+  --t-28: 1.75rem;
+  --t-32: 2rem;
+
+  /* Rhythm */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* Shape — one scale, locked */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 160ms;
+  --dur-ui: 240ms;
+
+  --tabbar-h: 64px;
+  --rail-w: 232px;
+  --max-w: 460px;
 }
+
+/* LIGHT — warm paper, tinted (never pure white) */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --bg: oklch(97% 0.012 95);
+  --bg-deep: oklch(94% 0.014 95);
+  --surface: oklch(99% 0.006 95);
+  --surface-2: oklch(96% 0.012 95);
+  --ink: oklch(25% 0.02 95);
+  --ink-2: oklch(45% 0.02 95);
+  --ink-3: oklch(58% 0.015 95);
+  --rule: oklch(25% 0.02 95 / 0.12);
+  --rule-strong: oklch(25% 0.02 95 / 0.24);
+  --accent: oklch(38% 0.13 155);
+  --accent-soft: oklch(94% 0.04 155);
+  --warn: oklch(48% 0.14 30);
+  --warn-soft: oklch(95% 0.035 40);
+  --shadow: 0 10px 40px -18px oklch(20% 0.02 95 / 0.25);
+}
+
+/* DARK — lacquer / mineral, tinted (never pure black) */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: oklch(16% 0.014 95);
+  --bg-deep: oklch(12% 0.012 95);
+  --surface: oklch(21% 0.014 95);
+  --surface-2: oklch(24% 0.014 95);
+  --ink: oklch(91% 0 0);
+  --ink-2: oklch(74% 0.01 95);
+  --ink-3: oklch(56% 0.01 95);
+  --rule: oklch(92% 0 0 / 0.1);
+  --rule-strong: oklch(92% 0 0 / 0.2);
+  --accent: oklch(72% 0.13 158);
+  --accent-soft: oklch(28% 0.03 158);
+  --warn: oklch(64% 0.13 32);
+  --warn-soft: oklch(27% 0.03 30);
+  --shadow: 0 14px 50px -20px oklch(0% 0 0 / 0.7);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  background: var(--bg-soft);
+  background: var(--bg);
   color: var(--ink);
-  font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: var(--t-16);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-}
-@media (min-width: 700px) {
-  body { background: #ececec; }
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
 }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
-:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* Curtain overlay template */
+.theme-curtain {
+  position: fixed; inset: 0; z-index: 100;
+  pointer-events: none;
+  background: var(--curtain-color, var(--bg));
+}
