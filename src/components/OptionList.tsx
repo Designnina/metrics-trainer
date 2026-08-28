@@ -1,5 +1,4 @@
 import type { TestQuestion } from '../types';
-import { Check, Xmark } from 'iconoir-react';
 
 export function OptionList({ q, selected, revealed, onSelect }: {
   q: TestQuestion;
@@ -32,8 +31,8 @@ export function OptionList({ q, selected, revealed, onSelect }: {
         <button key={o.id} className={optionClass(o.id)} onClick={() => toggle(o.id)} disabled={revealed}>
           <span className="key" aria-hidden="true">{o.id.toUpperCase()}</span>
           <span className="lab grow">{o.label}</span>
-          {revealed && q.correct.includes(o.id) && <Check width={18} height={18} aria-label="верно" />}
-          {revealed && !q.correct.includes(o.id) && selected?.includes(o.id) && <Xmark width={18} height={18} aria-label="неверно" />}
+          {revealed && q.correct.includes(o.id) && <span style={{ color: 'var(--accent)', fontWeight: 700 }}>✓</span>}
+          {revealed && !q.correct.includes(o.id) && selected?.includes(o.id) && <span style={{ color: 'var(--bad)' }}>✗</span>}
         </button>
       ))}
     </div>

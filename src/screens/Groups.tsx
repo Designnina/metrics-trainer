@@ -8,8 +8,6 @@ export function Groups() {
   return (
     <div className="screen">
       <header className="screen-head">
-        <span className="screen-meta">Groups / 05</span>
-        <span className="screen-count">5 семейств</span>
         <h1 className="screen-title">Группы<br />метрик</h1>
       </header>
       <p className="screen-sub">
@@ -25,13 +23,13 @@ export function Groups() {
             <Link to={`/library?f=${f.id}`} key={f.id} className="li li-link">
               <span className="li-num">{String(fi + 1).padStart(2, '0')}</span>
               <span className="grow">
-                <span className="li-name">{f.title} <span className="li-meta" style={{ display: 'inline', color: 'var(--ink-3)' }}>· {f.subtitle}</span></span>
+                <span className="li-name">{f.title} <span style={{ fontWeight: 400, color: 'var(--ink-3)', fontSize: 'var(--t-15)' }}>· {f.subtitle}</span></span>
                 <div className="li-meta">{f.description}</div>
                 <div className="tag-row" style={{ marginTop: 10 }}>
                   {cats.map(c => <span key={c.id} className="chip">{c.title}</span>)}
                 </div>
               </span>
-              <span className="li-right">{mastered}/{ms.length} освоено</span>
+              <span className="li-right">{mastered}/{ms.length}</span>
             </Link>
           );
         })}

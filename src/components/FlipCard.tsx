@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
 import type { Metric } from '../types';
-import { categoryById, familyById } from '../data/taxonomy';
 import { metricName } from '../data/metrics';
 
 interface Props {
@@ -9,10 +8,8 @@ interface Props {
   index: number;
 }
 
-/** Презентационная карточка: только визуальный flip. Интерактивность — в SwipeDeck. */
+/** Презентационная карточка — редакционная, без избыточных моно-меток. */
 export function FlipCard({ metric, flipped, index }: Props) {
-  const cat = categoryById[metric.categoryId];
-  const fam = familyById[metric.family];
   const reduce = useReducedMotion();
   const confused = metric.confusedWith.slice(0, 4);
 
@@ -24,22 +21,14 @@ export function FlipCard({ metric, flipped, index }: Props) {
         transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
         aria-hidden="true"
       >
-        {/* FRONT */}
+        {/* FRONT — editorial: metric name + big question, no technical codes */}
         <div className="flip-face flip-front">
-          <div className="f-top">
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            <span>{fam.title}</span>
-          </div>
           <div className="f-name">{metric.name}</div>
           <div className="f-rule" />
           <div className="f-q">{metric.tagline}</div>
-          <div className="f-foot">
-            <span>{cat.title} / {metric.categoryId.split('-')[0]}</span>
-            <span>FLIP / SPACE</span>
-          </div>
         </div>
 
-        {/* BACK */}
+        {/* BACK — structured editorial sections */}
         <div className="flip-face flip-back">
           <div className="flip-back-card">
             <div className="flip-scroll">

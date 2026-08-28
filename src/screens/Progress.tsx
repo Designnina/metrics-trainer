@@ -37,9 +37,8 @@ export function Progress() {
   return (
     <div className="screen">
       <header className="screen-head">
-        <span className="screen-meta">Progress / 04</span>
-        <span className="screen-count">{pct}%</span>
         <h1 className="screen-title">Прогресс</h1>
+        <span className="screen-count">{pct}%</span>
       </header>
 
       <div className="stat-grid">
@@ -52,7 +51,6 @@ export function Progress() {
       </div>
 
       <div className="sec-gap">
-        <div className="sec-label">Общий прогресс</div>
         <div className="pr-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Общий прогресс">
           <div className="pr-fill" style={{ width: `${pct}%` }} />
         </div>
@@ -86,7 +84,7 @@ export function Progress() {
           <div className="list">
             {weak.map(({ m, w, c }) => (
               <div className="li" key={m.id} style={{ cursor: 'default' }}>
-                <span className="li-num">{String(w).padStart(2, '0')}✗</span>
+                <span className="li-num">{String(w).padStart(2, '0')}</span>
                 <span className="grow">
                   <span className="li-name">{m.name}</span>
                   <div className="li-meta">ошибок {w} · верно {c}</div>
@@ -100,7 +98,7 @@ export function Progress() {
       <div className="sec-gap">
         <div className="sec-label">Самые путающиеся пары</div>
         {topPairs.length === 0 ? (
-          <div className="empty" style={{ padding: '32px 0' }}>Пока нет confusion-пар.</div>
+          <div className="empty" style={{ padding: '32px 0' }}>Пока нет путающихся пар.</div>
         ) : (
           <div className="list">
             {topPairs.map((p, i) => (

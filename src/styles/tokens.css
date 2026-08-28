@@ -2,11 +2,15 @@
 @import "@fontsource/onest/500.css";
 @import "@fontsource/onest/600.css";
 @import "@fontsource/onest/700.css";
+@import "@fontsource/unbounded/500.css";
+@import "@fontsource/unbounded/600.css";
+@import "@fontsource/unbounded/700.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
 :root {
-  /* Type — Onest (Space Grotesk equivalent with full Cyrillic) + IBM Plex Mono */
+  /* Display — Unbounded (large headings only, Cyrillic-capable); UI — Onest; mono — IBM Plex Mono (very limited) */
+  --font-display: "Unbounded", system-ui, sans-serif;
   --font-sans: "Onest", "Helvetica Neue", Arial, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -27,10 +31,10 @@
   --t-56: 3.5rem;
   --t-64: 4rem;
 
-  /* Display & card type — large, mobile-aware */
-  --t-title: clamp(2.375rem, 8vw, 4.5rem);      /* page title 38–72 */
-  --t-question: clamp(1.9rem, 5.5vw, 2.75rem);  /* card question 30–44 */
-  --t-section: clamp(1.5rem, 3vw, 2rem);        /* section heads 24–32 */
+  /* Display & card type — expressive via scale/spacing, not mono labels */
+  --t-title: clamp(2.375rem, 8vw, 4.5rem);
+  --t-question: clamp(1.9rem, 5.5vw, 2.75rem);
+  --t-section: clamp(1.5rem, 3vw, 2rem);
 
   /* Rhythm */
   --sp-1: 4px;
@@ -44,12 +48,12 @@
   --sp-9: 96px;
   --sp-10: 128px;
 
-  /* Shape */
+  /* Shape — fewer boxes, thinner rules; card radius reduced, editorial */
   --r-xs: 4px;
   --r-sm: 8px;
   --r-md: 12px;
-  --r-lg: 18px;
-  --r-xl: 24px;
+  --r-lg: 14px;
+  --r-xl: 20px;
   --r-pill: 999px;
 
   /* Motion */
@@ -68,7 +72,7 @@
   --card-w: min(100%, 720px);
 }
 
-/* LIGHT — cold off-white, monochrome, single acid signal */
+/* LIGHT — cold off-white, mono + single cobalt signal (same both themes) */
 :root, [data-theme="light"] {
   color-scheme: light;
   --bg: #F2F3F2;
@@ -80,13 +84,15 @@
   --ink-3: #9B9B9B;
   --rule: rgba(20, 20, 20, 0.10);
   --rule-strong: rgba(20, 20, 20, 0.22);
-  --accent: #DFFF58;
-  --accent-ink: #141414;
+  /* cobalt — contrast 5.28 on white, 3.17 on dark surface (passes 3:1 + 4.5:1) */
+  --accent: #3358FF;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #EEF0FF;
   --bad: oklch(55% 0.14 25);
-  --shadow: 0 1px 2px rgba(20, 20, 20, 0.05), 0 18px 48px -28px rgba(20, 20, 20, 0.16);
+  --shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 10px 28px -20px rgba(20, 20, 20, 0.10);
 }
 
-/* DARK — near-black monochrome, same single acid signal */
+/* DARK — near-black, same cobalt signal (hue-locked, not separate palette) */
 [data-theme="dark"] {
   color-scheme: dark;
   --bg: #151616;
@@ -98,10 +104,11 @@
   --ink-3: #5E5F5F;
   --rule: rgba(235, 236, 236, 0.10);
   --rule-strong: rgba(235, 236, 236, 0.22);
-  --accent: #DFFF58;
-  --accent-ink: #141414;
+  --accent: #3358FF;
+  --accent-ink: #FFFFFF;
+  --accent-soft: rgba(51, 88, 255, 0.14);
   --bad: oklch(66% 0.13 25);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 20px 56px -32px rgba(0, 0, 0, 0.65);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 36px -24px rgba(0, 0, 0, 0.55);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -118,7 +125,7 @@ body {
 }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 ::selection { background: var(--accent); color: var(--accent-ink); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 

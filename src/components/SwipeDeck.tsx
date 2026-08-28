@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useReducedMotion, useTransform, animate } from 'motion/react';
-import { ArrowRight, ArrowLeft } from 'iconoir-react';
 import type { Metric } from '../types';
 import { FlipCard } from './FlipCard';
 
@@ -96,8 +95,8 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
     <div className="deck">
       <div className="deck-stack">
         {next && (
-          <div className="behind" aria-hidden="true" style={{ transform: 'scale(0.97) translateY(14px)', opacity: 0.55 }}>
-            <span className="behind-name">{next.name.toUpperCase()}</span>
+          <div className="behind" aria-hidden="true" style={{ transform: 'scale(0.97) translateY(14px)', opacity: 0.5 }}>
+            <span className="behind-name">{next.name}</span>
           </div>
         )}
 
@@ -129,10 +128,10 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
 
       <div className="act-row">
         <button className="act" onClick={() => commit('unknown')}>
-          <ArrowLeft /> Не знаю
+          ← Не знаю
         </button>
         <button className="act known" onClick={() => commit('known')}>
-          Знаю <ArrowRight />
+          Знаю →
         </button>
       </div>
     </div>

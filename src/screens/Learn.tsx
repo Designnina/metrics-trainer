@@ -32,9 +32,8 @@ export function Learn() {
   return (
     <div className="screen">
       <header className="screen-head">
-        <span className="screen-meta">Learn / 01</span>
-        <span className="screen-count">Card 01—{String(deck.length).padStart(2, '0')}</span>
-        <h1 className="screen-title">Свайп-<br />карточки</h1>
+        <h1 className="screen-title">Свайп—<br />карточки</h1>
+        <span className="screen-count">{String(safeIdx + 1).padStart(2, '0')} — {String(deck.length).padStart(2, '0')}</span>
       </header>
 
       <div className="filters" role="tablist" aria-label="Фильтр по группам">
@@ -46,12 +45,8 @@ export function Learn() {
         ))}
       </div>
 
-      <div className="mastery">
-        <div className="m-row">
-          <span className="m-label">Mastery</span>
-          <span className="m-pct">{masteryPct}%</span>
-        </div>
-        <div className="m-rule" role="progressbar" aria-valuenow={masteryPct} aria-valuemin={0} aria-valuemax={100} aria-label="Освоение колоды">
+      <div className="mastery" aria-label="Прогресс освоения">
+        <div className="m-rule" role="progressbar" aria-valuenow={masteryPct} aria-valuemin={0} aria-valuemax={100}>
           <div className="m-fill" style={{ width: `${masteryPct}%` }} />
         </div>
       </div>

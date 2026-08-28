@@ -3,7 +3,6 @@ import { questions } from '../data/questions';
 import { useStore } from '../state/store';
 import { OptionList } from '../components/OptionList';
 import { metricName } from '../data/metrics';
-import { Check, Xmark } from 'iconoir-react';
 import type { TestQuestion } from '../types';
 
 export function Test() {
@@ -38,9 +37,8 @@ export function Test() {
     return (
       <div className="screen">
         <header className="screen-head">
-          <span className="screen-meta">Test / 02</span>
-          <span className="screen-count">{String(questions.length).padStart(2, '0')} вопросов</span>
           <h1 className="screen-title">Проверка<br />знаний</h1>
+          <span className="screen-count">{questions.length}</span>
         </header>
         <p className="screen-sub">
           7 типов заданий: определить метрику, сравнить, рассчитать, интерпретировать, найти ошибку. Слабым темам вопросы достаются чаще.
@@ -50,7 +48,6 @@ export function Test() {
             Начать тест
           </button>
         </div>
-        <div className="tech" style={{ marginTop: 22 }}>Тем: {questions.length} · слабая память → повтор пар-метрик</div>
       </div>
     );
   }
@@ -73,23 +70,21 @@ export function Test() {
 
   return (
     <div className="screen">
-      <header className="screen-head">
-        <span className="screen-meta">Test / {String(qi + 1).padStart(2, '0')}—{String(queue.length).padStart(2, '0')}</span>
-        <span className="screen-count">{typeLabel[primary.type]}</span>
-        <h1 className="screen-title">{typeLabel[primary.type]}</h1>
+      <header className="screen-head" style={{ marginBottom: 36 }}>
+        <h1 className="screen-title" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)' }}>{typeLabel[primary.type]}</h1>
+        <span className="screen-count">{String(qi + 1).padStart(2, '0')} / {String(queue.length).padStart(2, '0')}</span>
       </header>
 
-      <div style={{ marginTop: 34 }}>
-        <div className="tech" style={{ marginBottom: 12 }}>Level {primary.level}</div>
+      <div className="card" style={{ padding: 28 }}>
         <div className="h2" style={{ maxWidth: '30ch', lineHeight: 1.15 }}>{primary.prompt}</div>
         {primary.situation && (
-          <div style={{ marginTop: 18, maxWidth: '60ch', color: 'var(--ink-2)', fontSize: 'var(--t-15)', lineHeight: 1.55 }}>
+          <div className="body" style={{ marginTop: 18, maxWidth: '60ch' }}>
             {primary.situation}
           </div>
         )}
       </div>
 
-      <div style={{ marginTop: 34 }}>
+      <div style={{ marginTop: 32 }}>
         <OptionList q={primary} selected={selected} revealed={revealed} onSelect={setSelected} />
       </div>
 
@@ -101,8 +96,7 @@ export function Test() {
         <>
           <div className={`feedback ${correctNow ? 'ok' : 'bad'}`} style={{ marginTop: 30 }} role="status">
             <div className="fb-head">
-              {correctNow ? <Check width={18} height={18} /> : <Xmark width={18} height={18} />}
-              {correctNow ? 'Верно' : 'Неверно'} · {primary.correct.map(id => primary.options.find(o => o.id === id)?.label).join(', ')}
+              {correctNow ? '✓ Верно' : '✗ Неверно'} · {primary.correct.map(id => primary.options.find(o => o.id === id)?.label).join(', ')}
             </div>
             <div className="fb-body"><strong>Почему:</strong> {primary.why}</div>
             <div className="fb-body" style={{ marginTop: 12 }}>
@@ -120,7 +114,7 @@ export function Test() {
         </>
       )}
 
-      <div className="tech" style={{ marginTop: 26 }}>Темы: {primary.metricIds.map(metricName).join(' · ')}</div>
+      <div style={{ marginTop: 26, fontSize: 'var(--t-13)', color: 'var(--ink-3)', fontFamily: 'var(--font-sans)' }}>Темы: {primary.metricIds.map(metricName).join(' · ')}</div>
     </div>
   );
 }

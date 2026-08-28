@@ -1,5 +1,4 @@
 import { HashRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { Book, EditPencil, StatsUpSquare, Timer, SunLight, MoonSat } from 'iconoir-react';
 import { StoreProvider } from './state/store';
 import { ThemeProvider, useTheme } from './state/theme';
 import { Learn } from './screens/Learn';
@@ -10,22 +9,17 @@ import { MetricDetail } from './screens/MetricDetail';
 import { Progress } from './screens/Progress';
 
 const tabs = [
-  { to: '/', label: 'Learn', icon: Book, end: true },
-  { to: '/test', label: 'Test', icon: EditPencil },
-  { to: '/library', label: 'Metrics', icon: StatsUpSquare },
-  { to: '/progress', label: 'Progress', icon: Timer },
+  { to: '/', num: '01', label: 'Learn', end: true },
+  { to: '/test', num: '02', label: 'Test' },
+  { to: '/library', num: '03', label: 'Metrics' },
+  { to: '/progress', num: '04', label: 'Progress' },
 ];
 
-function ThemeIcon() {
-  const { theme } = useTheme();
-  return theme === 'dark' ? <SunLight /> : <MoonSat />;
-}
-
 function ThemeButton() {
-  const { toggle } = useTheme();
+  const { theme, toggle } = useTheme();
   return (
     <button className="icon-btn" onClick={() => void toggle()} aria-label="Переключить тему" title="Сменить тему">
-      <ThemeIcon />
+      <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>{theme === 'dark' ? '☼' : '●'}</span>
     </button>
   );
 }
@@ -40,8 +34,8 @@ function Chrome() {
       <nav aria-label="Разделы">
         {tabs.map(t => (
           <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => (isActive ? 'active' : '')}>
-            <t.icon />
-            <span>{t.label}</span>
+            <span className="nav-num">{t.num}</span>
+            <span className="nav-lbl">{t.label}</span>
           </NavLink>
         ))}
       </nav>
@@ -58,12 +52,12 @@ function TabBar() {
     <nav className="tabbar" aria-label="Основная навигация">
       {tabs.map(t => (
         <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => (isActive ? 'active' : '')}>
-          <t.icon />
+          <span className="nav-num">{t.num}</span>
           <span>{t.label}</span>
         </NavLink>
       ))}
       <button className="tab-btn" onClick={() => void toggle()} aria-label="Переключить тему">
-        <ThemeIcon />
+        <span aria-hidden="true">○</span>
       </button>
     </nav>
   );
