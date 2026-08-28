@@ -1,20 +1,21 @@
-@import "@fontsource/albert-sans/latin-400.css";
-@import "@fontsource/albert-sans/latin-500.css";
-@import "@fontsource/albert-sans/latin-600.css";
-@import "@fontsource/albert-sans/latin-700.css";
-@import "@fontsource/ibm-plex-mono/latin-400.css";
-@import "@fontsource/ibm-plex-mono/latin-500.css";
+@import "@fontsource/onest/400.css";
+@import "@fontsource/onest/500.css";
+@import "@fontsource/onest/600.css";
+@import "@fontsource/onest/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 
 :root {
-  /* Type */
-  --font-sans: "Albert Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  /* Type — Onest (Space Grotesk equivalent with full Cyrillic) + IBM Plex Mono */
+  --font-sans: "Onest", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Type scale (16px root) — big display, medium, body, mono labels */
+  /* Type scale */
   --t-11: 0.6875rem;
   --t-12: 0.75rem;
   --t-13: 0.8125rem;
   --t-14: 0.875rem;
+  --t-15: 0.9375rem;
   --t-16: 1rem;
   --t-18: 1.125rem;
   --t-20: 1.25rem;
@@ -23,10 +24,13 @@
   --t-32: 2rem;
   --t-40: 2.5rem;
   --t-48: 3rem;
-  --t-display: clamp(2.125rem, 8vw, 2.75rem);
+  --t-56: 3.5rem;
+  --t-64: 4rem;
 
-  /* Rules */
-  --hairline: 1px solid var(--rule);
+  /* Display & card type — large, mobile-aware */
+  --t-title: clamp(2.375rem, 8vw, 4.5rem);      /* page title 38–72 */
+  --t-question: clamp(1.9rem, 5.5vw, 2.75rem);  /* card question 30–44 */
+  --t-section: clamp(1.5rem, 3vw, 2rem);        /* section heads 24–32 */
 
   /* Rhythm */
   --sp-1: 4px;
@@ -37,60 +41,67 @@
   --sp-6: 32px;
   --sp-7: 48px;
   --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
 
-  /* Shape — one scale, locked */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
+  /* Shape */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
   --r-pill: 999px;
 
   /* Motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --dur-fast: 160ms;
+  --dur-fast: 150ms;
   --dur-ui: 240ms;
+  --dur-card: 420ms;
 
-  --tabbar-h: 64px;
-  --rail-w: 232px;
-  --max-w: 460px;
+  /* Layout */
+  --rail-w: 84px;
+  --tabbar-h: 60px;
+  --gutter: 20px;
+  --gutter-lg: clamp(32px, 5vw, 64px);
+  --content-w: 1080px;
+  --card-w: min(100%, 720px);
 }
 
-/* LIGHT — monochrome white/grey (chroma 0, no warm tint) */
+/* LIGHT — cold off-white, monochrome, single acid signal */
 :root, [data-theme="light"] {
   color-scheme: light;
-  --bg: oklch(97.5% 0 0);
-  --bg-deep: oklch(94% 0 0);
-  --surface: oklch(99.5% 0 0);
-  --surface-2: oklch(95.5% 0 0);
-  --ink: oklch(24% 0 0);
-  --ink-2: oklch(45% 0 0);
-  --ink-3: oklch(61% 0 0);
-  --rule: oklch(24% 0 0 / 0.12);
-  --rule-strong: oklch(24% 0 0 / 0.28);
-  --accent: oklch(24% 0 0);
-  --accent-soft: oklch(96% 0 0);
-  --warn: oklch(52% 0 0);
-  --warn-soft: oklch(94% 0 0);
-  --shadow: 0 10px 40px -18px oklch(20% 0 0 / 0.22);
+  --bg: #F2F3F2;
+  --bg-2: #E9EAE9;
+  --surface: #FFFFFF;
+  --surface-2: #F7F8F7;
+  --ink: #141414;
+  --ink-2: #6E6E6E;
+  --ink-3: #9B9B9B;
+  --rule: rgba(20, 20, 20, 0.10);
+  --rule-strong: rgba(20, 20, 20, 0.22);
+  --accent: #DFFF58;
+  --accent-ink: #141414;
+  --bad: oklch(55% 0.14 25);
+  --shadow: 0 1px 2px rgba(20, 20, 20, 0.05), 0 18px 48px -28px rgba(20, 20, 20, 0.16);
 }
 
-/* DARK — monochrome black/grey (chroma 0) */
+/* DARK — near-black monochrome, same single acid signal */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: oklch(15% 0 0);
-  --bg-deep: oklch(11% 0 0);
-  --surface: oklch(19% 0 0);
-  --surface-2: oklch(23.5% 0 0);
-  --ink: oklch(92% 0 0);
-  --ink-2: oklch(72% 0 0);
-  --ink-3: oklch(54% 0 0);
-  --rule: oklch(92% 0 0 / 0.1);
-  --rule-strong: oklch(92% 0 0 / 0.22);
-  --accent: oklch(92% 0 0);
-  --accent-soft: oklch(26% 0 0);
-  --warn: oklch(64% 0 0);
-  --warn-soft: oklch(24% 0 0);
-  --shadow: 0 14px 50px -20px oklch(0% 0 0 / 0.7);
+  --bg: #151616;
+  --bg-2: #0F1010;
+  --surface: #1D1E1E;
+  --surface-2: #242525;
+  --ink: #EBECEC;
+  --ink-2: #8A8B8B;
+  --ink-3: #5E5F5F;
+  --rule: rgba(235, 236, 236, 0.10);
+  --rule-strong: rgba(235, 236, 236, 0.22);
+  --accent: #DFFF58;
+  --accent-ink: #141414;
+  --bad: oklch(66% 0.13 25);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 20px 56px -32px rgba(0, 0, 0, 0.65);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,23 +111,24 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--t-16);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
 }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+::selection { background: var(--accent); color: var(--accent-ink); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
 
-/* Curtain overlay — hidden off-screen by default, only sweeps in during a theme switch */
+/* Curtain overlay — hidden off-screen, sweeps once during a theme switch */
 .theme-curtain {
-  position: fixed; inset: 0; z-index: 100;
+  position: fixed; inset: 0; z-index: 200;
   pointer-events: none;
   background: var(--curtain-color, var(--bg));
   transform: translateX(101%);

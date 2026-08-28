@@ -4,7 +4,6 @@ import { families } from '../data/taxonomy';
 import { useStore } from '../state/store';
 import { duePriority } from '../state/spacedRepetition';
 import { SwipeDeck } from '../components/SwipeDeck';
-import { ProgressBar } from '../components/ProgressBar';
 
 type Filter = 'all' | string;
 
@@ -22,36 +21,40 @@ export function Learn() {
 
   const safeIdx = Math.min(idx, deck.length - 1);
   const seenInDeck = deck.filter(m => state.progress[m.id]?.seen).length;
+  const masteryPct = deck.length ? Math.round((seenInDeck / deck.length) * 100) : 0;
 
   useEffect(() => {
     if (deck.length) seen(deck[Math.min(idx, deck.length - 1)].id);
   }, [idx, filter, deck.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!deck.length) return <div className="empty">Нет метрик для изучения.</div>;
-  const metric = deck[safeIdx];
 
   return (
     <div className="screen">
-      <div className="screen-head">
-        <div>
-          <div className="eyebrow">Learn</div>
-          <div className="h1">Свайп-карточки</div>
-        </div>
-        <div className="screen-count mono">{safeIdx + 1} / {deck.length}</div>
-      </div>
+      <header className="screen-head">
+        <span className="screen-meta">Learn / 01</span>
+        <span className="screen-count">Card 01—{String(deck.length).padStart(2, '0')}</span>
+        <h1 className="screen-title">Свайп-<br />карточки</h1>
+      </header>
 
-      <div className="seg" role="tablist" aria-label="Фильтр по группам">
-        <button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'on' : ''} onClick={() => { setFilter('all'); setIdx(0); }}>Все</button>
+      <div className="filters" role="tablist" aria-label="Фильтр по группам">
+        <button role="tab" aria-selected={filter === 'all'} className={`f-tab ${filter === 'all' ? 'on' : ''}`} onClick={() => { setFilter('all'); setIdx(0); }}>All</button>
         {families.map(f => (
-          <button key={f.id} role="tab" aria-selected={filter === f.id} className={filter === f.id ? 'on' : ''} onClick={() => { setFilter(f.id); setIdx(0); }}>
+          <button key={f.id} role="tab" aria-selected={filter === f.id} className={`f-tab ${filter === f.id ? 'on' : ''}`} onClick={() => { setFilter(f.id); setIdx(0); }}>
             {f.title}
           </button>
         ))}
       </div>
 
-      <div style={{ height: 28 }} />
-      <ProgressBar value={seenInDeck} max={deck.length} label="Изучено в колоде" />
-      <div style={{ height: 28 }} />
+      <div className="mastery">
+        <div className="m-row">
+          <span className="m-label">Mastery</span>
+          <span className="m-pct">{masteryPct}%</span>
+        </div>
+        <div className="m-rule" role="progressbar" aria-valuenow={masteryPct} aria-valuemin={0} aria-valuemax={100} aria-label="Освоение колоды">
+          <div className="m-fill" style={{ width: `${masteryPct}%` }} />
+        </div>
+      </div>
 
       <SwipeDeck
         deck={deck}

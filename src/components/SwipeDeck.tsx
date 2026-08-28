@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useReducedMotion, useTransform, animate } from 'motion/react';
+import { ArrowRight, ArrowLeft } from 'iconoir-react';
 import type { Metric } from '../types';
 import { FlipCard } from './FlipCard';
 
@@ -57,8 +58,7 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging.current) return;
-    const dx = e.clientX - startX.current;
-    x.set(dx);
+    x.set(e.clientX - startX.current);
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
@@ -67,17 +67,14 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
     const dx = e.clientX - startX.current;
     const dy = Math.abs(e.clientY - startY.current);
     const dt = Date.now() - startTime.current;
-    const v = dx;
 
-    // Tap (little horizontal movement, short, and small vertical drift) → flip.
     if (Math.abs(dx) < TAP_SLOP && dy < 14 && dt < 500) {
       resetTop();
       setFlipped(f => !f);
       return;
     }
-    // Otherwise: swipe.
-    if (v > THRESHOLD) commit('known');
-    else if (v < -THRESHOLD) commit('unknown');
+    if (dx > THRESHOLD) commit('known');
+    else if (dx < -THRESHOLD) commit('unknown');
     else resetTop();
   };
 
@@ -97,17 +94,15 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
 
   return (
     <div className="deck">
-      <div className="deck-stack" style={{ height: 400 }}>
+      <div className="deck-stack">
         {next && (
-          <div className="swipe-wrap" style={{ transform: 'scale(0.96) translateY(10px)', opacity: 0.7 }}>
-            <div className="card flip-preview">
-              <span className="chip">{next.name.toUpperCase()}</span>
-            </div>
+          <div className="behind" aria-hidden="true" style={{ transform: 'scale(0.97) translateY(14px)', opacity: 0.55 }}>
+            <span className="behind-name">{next.name.toUpperCase()}</span>
           </div>
         )}
 
         <motion.div
-          className="swipe-wrap swipe-hit"
+          className="swipe-hit"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -122,22 +117,23 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
             if (e.key === 'Enter') { e.preventDefault(); setFlipped(f => !f); }
           }}
         >
-          <motion.div className="swipe-overlay" style={{ opacity: knownOpacity }}>
-            <span className="tag known">Знаю →</span>
+          <motion.div className="swipe-overlay known" style={{ opacity: knownOpacity }}>
+            <span className="tag known">Знаю</span>
           </motion.div>
-          <motion.div className="swipe-overlay" style={{ opacity: unknownOpacity }}>
-            <span className="tag unknown">← Не знаю</span>
+          <motion.div className="swipe-overlay unknown" style={{ opacity: unknownOpacity }}>
+            <span className="tag unknown">Не знаю</span>
           </motion.div>
-          <FlipCard metric={metric} flipped={flipped} />
+          <FlipCard metric={metric} flipped={flipped} index={index} />
         </motion.div>
       </div>
 
-      <div className="deck-actions">
-        <button className="btn warn" onClick={() => commit('unknown')}>← Не знаю</button>
-        <button className="btn tint" onClick={() => commit('known')}>Знаю →</button>
-      </div>
-      <div className="tiny muted" style={{ textAlign: 'center', marginTop: 10 }}>
-        Тап — перевернуть · свайп: вправо — знаю, влево — не знаю
+      <div className="act-row">
+        <button className="act" onClick={() => commit('unknown')}>
+          <ArrowLeft /> Не знаю
+        </button>
+        <button className="act known" onClick={() => commit('known')}>
+          Знаю <ArrowRight />
+        </button>
       </div>
     </div>
   );

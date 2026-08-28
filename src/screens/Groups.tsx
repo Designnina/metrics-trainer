@@ -7,40 +7,32 @@ export function Groups() {
   const { state } = useStore();
   return (
     <div className="screen">
-      <div className="eyebrow">Groups</div>
-      <div className="h1" style={{ fontSize: 26 }}>Разделение по группам</div>
-      <p className="sub" style={{ marginBottom: 20 }}>
+      <header className="screen-head">
+        <span className="screen-meta">Groups / 05</span>
+        <span className="screen-count">5 семейств</span>
+        <h1 className="screen-title">Группы<br />метрик</h1>
+      </header>
+      <p className="screen-sub">
         Пять семейств: продукт, бизнес, UX, юзабилити и эксперименты. Выберите группу, чтобы изучать её отдельно.
       </p>
-      <div className="stack">
-        {families.map(f => {
+
+      <div style={{ marginTop: 40 }}>
+        {families.map((f, fi) => {
           const ms = metricsByFamily(f.id);
           const cats = categoriesByFamily(f.id);
           const mastered = ms.filter(m => (state.progress[m.id]?.level ?? 0) >= 5).length;
           return (
-            <div key={f.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-              <Link to={`/library?f=${f.id}`} style={{ display: 'block', padding: 'var(--sp-5)', background: 'var(--surface-2)', borderBottom: '1px solid var(--rule)' }}>
-                <div className="row-flex">
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', letterSpacing: '.1em', fontSize: 13, fontWeight: 600 }}>{f.title}</div>
-                    <div style={{ fontSize: 14, marginTop: 4, color: 'var(--ink-2)' }}>{f.subtitle}</div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 700 }}>{ms.length}</div>
-                    <div className="tiny" style={{ color: 'var(--ink-3)' }}>метрик</div>
-                  </div>
+            <Link to={`/library?f=${f.id}`} key={f.id} className="li li-link">
+              <span className="li-num">{String(fi + 1).padStart(2, '0')}</span>
+              <span className="grow">
+                <span className="li-name">{f.title} <span className="li-meta" style={{ display: 'inline', color: 'var(--ink-3)' }}>· {f.subtitle}</span></span>
+                <div className="li-meta">{f.description}</div>
+                <div className="tag-row" style={{ marginTop: 10 }}>
+                  {cats.map(c => <span key={c.id} className="chip">{c.title}</span>)}
                 </div>
-              </Link>
-              <div style={{ padding: '14px 20px 18px' }}>
-                <div style={{ fontSize: 13, color: 'var(--ink-2)', marginBottom: 8 }}>{f.description}</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {cats.map(c => (
-                    <Link key={c.id} to={`/library?f=${f.id}`} className="chip">{c.title}</Link>
-                  ))}
-                </div>
-                <div className="tiny muted" style={{ marginTop: 10 }}>Освоено: {mastered} из {ms.length}</div>
-              </div>
-            </div>
+              </span>
+              <span className="li-right">{mastered}/{ms.length} освоено</span>
+            </Link>
           );
         })}
       </div>

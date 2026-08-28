@@ -1,4 +1,5 @@
 import { HashRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { Book, EditPencil, StatsUpSquare, Timer, SunLight, MoonSat } from 'iconoir-react';
 import { StoreProvider } from './state/store';
 import { ThemeProvider, useTheme } from './state/theme';
 import { Learn } from './screens/Learn';
@@ -9,17 +10,22 @@ import { MetricDetail } from './screens/MetricDetail';
 import { Progress } from './screens/Progress';
 
 const tabs = [
-  { to: '/', label: 'Learn', icon: '◐', end: true },
-  { to: '/test', label: 'Test', icon: '▣' },
-  { to: '/library', label: 'Metrics', icon: '≣' },
-  { to: '/progress', label: 'Progress', icon: '◉' },
+  { to: '/', label: 'Learn', icon: Book, end: true },
+  { to: '/test', label: 'Test', icon: EditPencil },
+  { to: '/library', label: 'Metrics', icon: StatsUpSquare },
+  { to: '/progress', label: 'Progress', icon: Timer },
 ];
 
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
+function ThemeIcon() {
+  const { theme } = useTheme();
+  return theme === 'dark' ? <SunLight /> : <MoonSat />;
+}
+
+function ThemeButton() {
+  const { toggle } = useTheme();
   return (
-    <button className="theme-btn" onClick={() => void toggle()} aria-label={`Переключить тему (сейчас ${theme === 'dark' ? 'тёмная' : 'светлая'})`} title="Сменить тему">
-      <span style={{ fontSize: 17 }} aria-hidden="true">{theme === 'dark' ? '☼' : '●'}</span>
+    <button className="icon-btn" onClick={() => void toggle()} aria-label="Переключить тему" title="Сменить тему">
+      <ThemeIcon />
     </button>
   );
 }
@@ -27,16 +33,38 @@ function ThemeToggle() {
 function Chrome() {
   return (
     <nav className="chrome" aria-label="Основная навигация">
-      <div className="brand">
-        <small>Product &amp; UX Metrics</small>
-        <span>Тренажёр</span>
+      <div className="brand" aria-hidden="true">
+        <b>MTR.</b>
+        <i>01</i>
       </div>
+      <nav aria-label="Разделы">
+        {tabs.map(t => (
+          <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => (isActive ? 'active' : '')}>
+            <t.icon />
+            <span>{t.label}</span>
+          </NavLink>
+        ))}
+      </nav>
+      <div className="rail-foot">
+        <ThemeButton />
+      </div>
+    </nav>
+  );
+}
+
+function TabBar() {
+  const { toggle } = useTheme();
+  return (
+    <nav className="tabbar" aria-label="Основная навигация">
       {tabs.map(t => (
         <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => (isActive ? 'active' : '')}>
-          <span className="ico" aria-hidden="true">{t.icon}</span>
+          <t.icon />
           <span>{t.label}</span>
         </NavLink>
       ))}
+      <button className="tab-btn" onClick={() => void toggle()} aria-label="Переключить тему">
+        <ThemeIcon />
+      </button>
     </nav>
   );
 }
@@ -48,7 +76,7 @@ export default function App() {
         <HashRouter>
           <div className="app">
             <Chrome />
-            <ThemeToggle />
+            <TabBar />
             <main className="app-main">
               <Routes>
                 <Route path="/" element={<Learn />} />

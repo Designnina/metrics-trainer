@@ -41,7 +41,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const W = Math.max(window.innerWidth, 1);
     const targetColor = getComputedStyle(document.documentElement)
-      .getPropertyValue(next === 'dark' ? '--bg-deep' : '--bg')
+      .getPropertyValue(next === 'dark' ? '--bg-2' : '--bg')
       .trim() || 'oklch(11% 0 0)';
 
     // ONE continuous directional sweep: enter from the right, exit to the left.

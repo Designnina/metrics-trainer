@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { metricById, metricName } from '../data/metrics';
 import { categoryById, familyById } from '../data/taxonomy';
-import { FamilyBadge } from '../components/MetricBadge';
+import { ArrowLeft } from 'iconoir-react';
 
 export function MetricDetail() {
   const { id } = useParams();
@@ -12,77 +12,74 @@ export function MetricDetail() {
   const fam = familyById[m.family];
 
   const Section = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <div>
-      <div className="eyebrow" style={{ marginBottom: 4 }}>{label}</div>
+    <section>
+      <div className="sec-label">{label}</div>
       {children}
-    </div>
+    </section>
   );
 
   return (
     <div className="screen">
-      <Link to="/library" className="tiny muted" style={{ display: 'inline-block', marginBottom: 12 }}>← Библиотека</Link>
-      <div className="row-flex" style={{ marginBottom: 8 }}>
-        <FamilyBadge family={m.family} dark />
-        <span className="chip">{cat.title}</span>
-      </div>
-      <div className="h1">{m.name}</div>
-      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 18, marginBottom: 20, fontWeight: 600, letterSpacing: '-0.01em' }}>
-        «{m.tagline}»
-      </div>
+      <Link to="/library" className="tech" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 40 }}>
+        <ArrowLeft width={14} height={14} /> Библиотека
+      </Link>
 
-      <div className="stack">
-        <Section label="Что это">{m.definition}</Section>
-        <Section label="Что измеряет">{m.measures}</Section>
+      <header className="screen-head">
+        <span className="screen-meta">{fam.title} / {cat.title}</span>
+        <span className="screen-count">Card {m.id.slice(0, 2)}</span>
+        <h1 className="screen-title" style={{ fontSize: 'clamp(2.25rem, 6vw, 3.75rem)' }}>{m.name}</h1>
+      </header>
+      <p className="screen-sub" style={{ fontSize: 'var(--t-question)', fontWeight: 600, color: 'var(--ink)', marginTop: 26, maxWidth: '22ch', lineHeight: 1.12, letterSpacing: '-0.015em' }}>
+        «{m.tagline}»
+      </p>
+
+      <div className="stack" style={{ marginTop: 48, gap: 40 }}>
+        <Section label="Что это">
+          <div className="body" style={{ fontSize: 'var(--t-18)', color: 'var(--ink)' }}>{m.definition}</div>
+        </Section>
+
+        <Section label="Что измеряет">
+          <div className="body">{m.measures}</div>
+        </Section>
+
         {m.formula && (
           <Section label="Формула">
-            <div className="mono" style={{ background: 'var(--surface-2)', border: '1px solid var(--rule)', borderRadius: 10, padding: '12px 14px' }}>{m.formula}</div>
+            <div className="fb-formula">{m.formula}</div>
             {m.formulaParts && Object.keys(m.formulaParts).length > 0 && (
-              <ul style={{ margin: '8px 0 0 18px', fontSize: 13, color: 'var(--ink-2)' }}>
-                {Object.entries(m.formulaParts).map(([k, v]) => <li key={k}><strong>{k}</strong> — {v}</li>)}
+              <ul style={{ margin: '12px 0 0 20px', display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ink-2)', fontSize: 'var(--t-14)' }}>
+                {Object.entries(m.formulaParts).map(([k, v]) => <li key={k}><strong style={{ color: 'var(--ink)' }}>{k}</strong> — {v}</li>)}
               </ul>
             )}
           </Section>
         )}
+
         {m.numericExample && (
           <Section label="Пример">
-            <div style={{ fontSize: 14 }}>{m.numericExample.label} <strong>{m.numericExample.result}</strong></div>
+            <div className="body" style={{ color: 'var(--ink)' }}>{m.numericExample.label} <strong>{m.numericExample.result}</strong></div>
           </Section>
         )}
-        <Section label="Интерпретация">{m.interpretation}</Section>
-        <Section label="Когда использовать">
-          <ul style={{ margin: '4px 0 0 18px' }}>{m.whenToUse.map(x => <li key={x} style={{ fontSize: 14 }}>{x}</li>)}</ul>
-        </Section>
-        <Section label="Когда НЕ использовать">
-          <ul style={{ margin: '4px 0 0 18px' }}>{m.whenNotToUse.map(x => <li key={x} style={{ fontSize: 14 }}>{x}</li>)}</ul>
-        </Section>
-        <Section label="Типичные ошибки">
-          <ul style={{ margin: '4px 0 0 18px' }}>{m.commonMistakes.map(x => <li key={x} style={{ fontSize: 14 }}>{x}</li>)}</ul>
-        </Section>
-        <Section label="Продуктовая работа">{m.productUse}</Section>
-        <Section label="Как говорить на собеседовании">
-          <div className="card-soft" style={{ borderRadius: 12, padding: '12px 14px', fontSize: 14 }}>{m.interviewTip}</div>
-        </Section>
+
+        <Section label="Интерпретация"><div className="body">{m.interpretation}</div></Section>
+        <Section label="Когда использовать"><ul className="body" style={{ margin: '0 0 0 20px' }}>{m.whenToUse.map(x => <li key={x}>{x}</li>)}</ul></Section>
+        <Section label="Когда НЕ использовать"><ul className="body" style={{ margin: '0 0 0 20px' }}>{m.whenNotToUse.map(x => <li key={x}>{x}</li>)}</ul></Section>
+        <Section label="Типичные ошибки"><ul className="body" style={{ margin: '0 0 0 20px' }}>{m.commonMistakes.map(x => <li key={x}>{x}</li>)}</ul></Section>
+        <Section label="Продуктовая работа"><div className="body">{m.productUse}</div></Section>
+        <Section label="Как говорить на собеседовании"><div className="body">{m.interviewTip}</div></Section>
+
         <Section label="Кейс">
-          <div className="card-soft" style={{ borderRadius: 12, padding: '12px 14px', fontSize: 14 }}>
-            <strong style={{ display: 'block', marginBottom: 4 }}>{m.caseStudy.title}</strong>
-            {m.caseStudy.text}
+          <div className="card" style={{ padding: 26 }}>
+            <div className="tech" style={{ marginBottom: 10 }}>{m.caseStudy.title}</div>
+            <div className="body" style={{ color: 'var(--ink)' }}>{m.caseStudy.text}</div>
           </div>
         </Section>
+
         <Section label="Связанные метрики">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {m.relatedMetrics.map(rid => (
-              <Link key={rid} to={`/metric/${rid}`} className="chip">{metricName(rid)}</Link>
-            ))}
-          </div>
+          <div className="tag-row">{m.relatedMetrics.map(rid => <Link key={rid} to={`/metric/${rid}`} className="chip">{metricName(rid)}</Link>)}</div>
         </Section>
+
         <Section label="Не путать с">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {m.confusedWith.map(rid => (
-              <Link key={rid} to={`/metric/${rid}`} className="chip">{metricName(rid)}</Link>
-            ))}
-          </div>
+          <div className="tag-row">{m.confusedWith.map(rid => <Link key={rid} to={`/metric/${rid}`} className="chip">{metricName(rid)}</Link>)}</div>
         </Section>
-        <div className="tiny muted" style={{ fontFamily: 'var(--font-mono)' }}>{fam.title} / {cat.title}</div>
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
-import { families, categoriesByFamily } from '../data/taxonomy';
+import { families } from '../data/taxonomy';
 import { metrics } from '../data/metrics';
 import { accuracy, masteredCount, seenCount, useStore } from '../state/store';
-import { ProgressBar } from '../components/ProgressBar';
 
 export function Progress() {
   const { state, reset } = useStore();
   const acc = accuracy(state);
   const mastered = masteredCount(state);
   const seen = seenCount(state);
+  const pct = metrics.length ? Math.round((seen / metrics.length) * 100) : 0;
 
   const weak = metrics
     .filter(m => (state.progress[m.id]?.wrong ?? 0) > 0)
@@ -25,74 +25,99 @@ export function Progress() {
   }
   const topPairs = confusedPairs.sort((x, y) => y.n - x.n).slice(0, 4);
 
+  const stats = [
+    { num: seen, unit: `/${metrics.length}`, lbl: 'Метрик изучено' },
+    { num: mastered, unit: '', lbl: 'Освоено' },
+    { num: state.answered, unit: '', lbl: 'Ответов' },
+    { num: acc, unit: '%', lbl: 'Точность' },
+    { num: state.bestStreak, unit: '', lbl: 'Лучшая серия' },
+    { num: state.streak, unit: '', lbl: 'Текущая серия' },
+  ];
+
   return (
     <div className="screen">
-      <div className="eyebrow">Progress</div>
-      <div className="h1" style={{ fontSize: 26 }}>Прогресс</div>
+      <header className="screen-head">
+        <span className="screen-meta">Progress / 04</span>
+        <span className="screen-count">{pct}%</span>
+        <h1 className="screen-title">Прогресс</h1>
+      </header>
 
-      <div className="stat-grid" style={{ marginBottom: 16 }}>
-        <div className="stat"><div className="num">{seen}<span className="tiny" style={{ fontSize: 13 }}>/{metrics.length}</span></div><div className="lbl">Метрик изучено</div></div>
-        <div className="stat"><div className="num">{mastered}</div><div className="lbl">Освоено</div></div>
-        <div className="stat"><div className="num">{state.answered}</div><div className="lbl">Ответов</div></div>
-        <div className="stat"><div className="num">{acc}%</div><div className="lbl">Точность</div></div>
-        <div className="stat"><div className="num">{state.bestStreak}</div><div className="lbl">Лучшая серия</div></div>
-        <div className="stat"><div className="num">{state.streak}</div><div className="lbl">Текущая серия</div></div>
+      <div className="stat-grid">
+        {stats.map(s => (
+          <div className="stat" key={s.lbl}>
+            <div className="stat-num">{s.num}<span className="u">{s.unit}</span></div>
+            <div className="stat-lbl">{s.lbl}</div>
+          </div>
+        ))}
       </div>
 
-      <ProgressBar value={seen} max={metrics.length} label="Общий прогресс" />
-      <div style={{ height: 24 }} />
+      <div className="sec-gap">
+        <div className="sec-label">Общий прогресс</div>
+        <div className="pr-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Общий прогресс">
+          <div className="pr-fill" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
 
-      <div className="eyebrow" style={{ marginBottom: 12 }}>По группам</div>
-      <div className="stack-sm">
-        {families.map(f => {
-          const ms = metrics.filter(m => m.family === f.id);
-          const done = ms.filter(m => state.progress[m.id]?.seen).length;
-          return (
-            <div key={f.id}>
-              <div className="row-flex" style={{ marginBottom: 4 }}>
-                <span style={{ fontSize: 14, fontWeight: 600 }}>{f.title} <span className="muted tiny">({f.subtitle})</span></span>
-                <span className="tiny muted">{done}/{ms.length}</span>
+      <div className="sec-gap">
+        <div className="sec-label">По группам</div>
+        <div className="stack" style={{ gap: 24 }}>
+          {families.map(f => {
+            const ms = metrics.filter(m => m.family === f.id);
+            const done = ms.filter(m => state.progress[m.id]?.seen).length;
+            const fp = ms.length ? Math.round((done / ms.length) * 100) : 0;
+            return (
+              <div key={f.id}>
+                <div className="m-row" style={{ marginBottom: 10 }}>
+                  <span className="m-label">{f.title}</span>
+                  <span className="m-pct">{done}/{ms.length} · {fp}%</span>
+                </div>
+                <div className="pr-track"><div className="pr-fill" style={{ width: `${fp}%` }} /></div>
               </div>
-              <ProgressBar value={done} max={ms.length} />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="sec-gap">
+        <div className="sec-label">Слабые метрики</div>
+        {weak.length === 0 ? (
+          <div className="empty" style={{ padding: '32px 0' }}>Пока нет слабых мест — отвечайте в Test.</div>
+        ) : (
+          <div className="list">
+            {weak.map(({ m, w, c }) => (
+              <div className="li" key={m.id} style={{ cursor: 'default' }}>
+                <span className="li-num">{String(w).padStart(2, '0')}✗</span>
+                <span className="grow">
+                  <span className="li-name">{m.name}</span>
+                  <div className="li-meta">ошибок {w} · верно {c}</div>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="sec-gap">
+        <div className="sec-label">Самые путающиеся пары</div>
+        {topPairs.length === 0 ? (
+          <div className="empty" style={{ padding: '32px 0' }}>Пока нет confusion-пар.</div>
+        ) : (
+          <div className="list">
+            {topPairs.map((p, i) => (
+              <div className="li" key={i} style={{ cursor: 'default' }}>
+                <span className="li-num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="grow">
+                  <span className="li-name">{p.a} ↔ {p.b}</span>
+                  <div className="li-meta">путали {p.n} раз</div>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <hr className="divider" />
-
-      <div className="eyebrow" style={{ marginBottom: 12 }}>Слабые метрики</div>
-      {weak.length === 0 ? (
-        <div className="empty" style={{ padding: '24px 0' }}>Пока нет слабых мест — отвечайте в Test.</div>
-      ) : (
-        <div className="list">
-          {weak.map(({ m, w, c }) => (
-            <div key={m.id} className="row">
-              <div className="grow"><div style={{ fontWeight: 600 }}>{m.name}</div><div className="meta">ошибок {w} · верно {c}</div></div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div style={{ height: 24 }} />
-      <div className="eyebrow" style={{ marginBottom: 12 }}>Самые путающиеся пары</div>
-      {topPairs.length === 0 ? (
-        <div className="empty" style={{ padding: '24px 0' }}>Пока нет confusion-пар.</div>
-      ) : (
-        <div className="list">
-          {topPairs.map((p, i) => (
-            <div key={i} className="row">
-              <div className="grow">
-                <div style={{ fontWeight: 600 }}>{p.a} ↔ {p.b}</div>
-                <div className="meta">путали {p.n} раз</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <hr className="divider" />
-      <button className="btn ghost full" onClick={() => { if (confirm('Сбросить весь прогресс?')) reset(); }}>Сбросить прогресс</button>
+      <button className="btn ghost" onClick={() => { if (confirm('Сбросить весь прогресс?')) reset(); }}>Сбросить прогресс</button>
     </div>
   );
 }

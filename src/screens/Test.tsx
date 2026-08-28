@@ -3,6 +3,7 @@ import { questions } from '../data/questions';
 import { useStore } from '../state/store';
 import { OptionList } from '../components/OptionList';
 import { metricName } from '../data/metrics';
+import { Check, Xmark } from 'iconoir-react';
 import type { TestQuestion } from '../types';
 
 export function Test() {
@@ -15,8 +16,7 @@ export function Test() {
   const primary = queue[qi];
   const correctNow = useMemo(() => {
     if (!primary || !selected) return null;
-    const ok = primary.correct.slice().sort().join() === selected.slice().sort().join();
-    return ok;
+    return primary.correct.slice().sort().join() === selected.slice().sort().join();
   }, [primary, selected]);
 
   const buildQueue = () => {
@@ -29,18 +29,28 @@ export function Test() {
     return [...weak, ...rest].slice(0, 12);
   };
 
+  const typeLabel: Record<string, string> = {
+    identify: 'Определи метрику', compare: 'Сравни метрики', multi: 'Выбери все подходящие',
+    calc: 'Рассчитай', interpret: 'Интерпретируй результат', select: 'Выбери набор метрик', mistake: 'Найди ошибку',
+  };
+
   if (!primary) {
     return (
       <div className="screen">
-        <div className="eyebrow">Test</div>
-        <div className="h1" style={{ fontSize: 26 }}>Проверка знаний</div>
-        <p className="sub" style={{ marginBottom: 24 }}>
+        <header className="screen-head">
+          <span className="screen-meta">Test / 02</span>
+          <span className="screen-count">{String(questions.length).padStart(2, '0')} вопросов</span>
+          <h1 className="screen-title">Проверка<br />знаний</h1>
+        </header>
+        <p className="screen-sub">
           7 типов заданий: определить метрику, сравнить, рассчитать, интерпретировать, найти ошибку. Слабым темам вопросы достаются чаще.
         </p>
-        <button className="btn full" onClick={() => { const q = buildQueue(); setQueue(q); setQi(0); setSelected(null); setRevealed(false); }}>
-          Начать тест
-        </button>
-        <div style={{ marginTop: 12 }} className="tiny muted">Тем: {questions.length} · Слабая память → повтор пар-метрик</div>
+        <div style={{ marginTop: 40 }}>
+          <button className="btn" onClick={() => { const q = buildQueue(); setQueue(q); setQi(0); setSelected(null); setRevealed(false); }}>
+            Начать тест
+          </button>
+        </div>
+        <div className="tech" style={{ marginTop: 22 }}>Тем: {questions.length} · слабая память → повтор пар-метрик</div>
       </div>
     );
   }
@@ -61,63 +71,56 @@ export function Test() {
     setQi(qi + 1); setSelected(null); setRevealed(false);
   };
 
-  const typeLabel: Record<string, string> = {
-    identify: 'Определи метрику', compare: 'Сравни метрики', multi: 'Выбери все подходящие',
-    calc: 'Рассчитай', interpret: 'Интерпретируй результат', select: 'Выбери набор метрик', mistake: 'Найди ошибку',
-  };
-
   return (
     <div className="screen">
-      <div className="row-flex" style={{ marginBottom: 16 }}>
-        <div>
-          <div className="eyebrow">Test</div>
-          <div className="h2">{typeLabel[primary.type]}</div>
-        </div>
-        <div className="mono muted">{qi + 1} / {queue.length}</div>
-      </div>
+      <header className="screen-head">
+        <span className="screen-meta">Test / {String(qi + 1).padStart(2, '0')}—{String(queue.length).padStart(2, '0')}</span>
+        <span className="screen-count">{typeLabel[primary.type]}</span>
+        <h1 className="screen-title">{typeLabel[primary.type]}</h1>
+      </header>
 
-      <div className="card" style={{ marginBottom: 16 }}>
-        <div className="mono muted" style={{ marginBottom: 8 }}>LEVEL {primary.level}</div>
-        <div style={{ fontSize: 17, fontWeight: 650, lineHeight: 1.4 }}>{primary.prompt}</div>
+      <div style={{ marginTop: 34 }}>
+        <div className="tech" style={{ marginBottom: 12 }}>Level {primary.level}</div>
+        <div className="h2" style={{ maxWidth: '30ch', lineHeight: 1.15 }}>{primary.prompt}</div>
         {primary.situation && (
-          <div className="card-soft" style={{ borderRadius: 12, padding: '12px 14px', marginTop: 12, fontSize: 14 }}>
-            <div className="eyebrow" style={{ marginBottom: 2 }}>Ситуация</div>
+          <div style={{ marginTop: 18, maxWidth: '60ch', color: 'var(--ink-2)', fontSize: 'var(--t-15)', lineHeight: 1.55 }}>
             {primary.situation}
           </div>
         )}
       </div>
 
-      <OptionList q={primary} selected={selected} revealed={revealed} onSelect={setSelected} />
+      <div style={{ marginTop: 34 }}>
+        <OptionList q={primary} selected={selected} revealed={revealed} onSelect={setSelected} />
+      </div>
 
       {!revealed ? (
-        <button className="btn full" style={{ marginTop: 16 }} onClick={submit} disabled={!selected}>
+        <button className="btn" style={{ marginTop: 30 }} onClick={submit} disabled={!selected}>
           Проверить
         </button>
       ) : (
         <>
-          <div className={`feedback ${correctNow ? 'ok' : 'bad'}`} style={{ marginTop: 16 }} role="status">
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>
-              {correctNow ? '✓ Верно' : '✗ Неверно'} · Правильно: {primary.correct.map(id => primary.options.find(o => o.id === id)?.label).join(', ')}
+          <div className={`feedback ${correctNow ? 'ok' : 'bad'}`} style={{ marginTop: 30 }} role="status">
+            <div className="fb-head">
+              {correctNow ? <Check width={18} height={18} /> : <Xmark width={18} height={18} />}
+              {correctNow ? 'Верно' : 'Неверно'} · {primary.correct.map(id => primary.options.find(o => o.id === id)?.label).join(', ')}
             </div>
-            <div style={{ fontSize: 14 }}><strong>Почему:</strong> {primary.why}</div>
-            <div style={{ fontSize: 14, marginTop: 8 }}>
+            <div className="fb-body"><strong>Почему:</strong> {primary.why}</div>
+            <div className="fb-body" style={{ marginTop: 12 }}>
               <strong>Почему нет:</strong>
-              <ul style={{ margin: '6px 0 0 18px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <ul>
                 {primary.options.filter(o => !primary.correct.includes(o.id)).map(o => (
                   <li key={o.id}>{o.label} — {primary.whyNot[o.id] ?? 'не подходит'}</li>
                 ))}
               </ul>
             </div>
           </div>
-          <button className="btn full" style={{ marginTop: 16 }} onClick={next}>
+          <button className="btn" style={{ marginTop: 24 }} onClick={next}>
             {qi + 1 >= queue.length ? 'Завершить' : 'Следующий вопрос'}
           </button>
         </>
       )}
 
-      <div style={{ marginTop: 16 }} className="tiny muted">
-        Темы: {primary.metricIds.map(metricName).join(' · ')}
-      </div>
+      <div className="tech" style={{ marginTop: 26 }}>Темы: {primary.metricIds.map(metricName).join(' · ')}</div>
     </div>
   );
 }
