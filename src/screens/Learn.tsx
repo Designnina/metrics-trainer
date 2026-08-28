@@ -32,12 +32,15 @@ export function Learn() {
 
   return (
     <div className="screen">
-      <div className="row-flex" style={{ marginBottom: 16 }}>
-        <div><div className="eyebrow">Learn</div><div className="h2">Свайп-карточки</div></div>
-        <div className="mono muted">{safeIdx + 1} / {deck.length}</div>
+      <div className="screen-head">
+        <div>
+          <div className="eyebrow">Learn</div>
+          <div className="h1">Свайп-карточки</div>
+        </div>
+        <div className="screen-count mono">{safeIdx + 1} / {deck.length}</div>
       </div>
 
-      <div className="seg" style={{ marginBottom: 16 }} role="tablist" aria-label="Фильтр по группам">
+      <div className="seg" role="tablist" aria-label="Фильтр по группам">
         <button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'on' : ''} onClick={() => { setFilter('all'); setIdx(0); }}>Все</button>
         {families.map(f => (
           <button key={f.id} role="tab" aria-selected={filter === f.id} className={filter === f.id ? 'on' : ''} onClick={() => { setFilter(f.id); setIdx(0); }}>
@@ -46,8 +49,9 @@ export function Learn() {
         ))}
       </div>
 
+      <div style={{ height: 28 }} />
       <ProgressBar value={seenInDeck} max={deck.length} label="Изучено в колоде" />
-      <div style={{ height: 20 }} />
+      <div style={{ height: 28 }} />
 
       <SwipeDeck
         deck={deck}

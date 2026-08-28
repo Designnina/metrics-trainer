@@ -39,28 +39,32 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const el = curtainRef.current;
     if (!el) { setThemeState(next); return Promise.resolve(); }
 
-    const full = Math.max(window.innerWidth, window.innerHeight);
+    const W = Math.max(window.innerWidth, 1);
     const targetColor = getComputedStyle(document.documentElement)
       .getPropertyValue(next === 'dark' ? '--bg-deep' : '--bg')
-      .trim() || 'oklch(12% 0.012 95)';
+      .trim() || 'oklch(11% 0 0)';
 
-    // Phase 1: cover the screen with the NEW theme's curtain, sweeping in from the right.
+    // ONE continuous directional sweep: enter from the right, exit to the left.
+    // The theme flips the instant the curtain fully covers the screen (x≈0).
+    // After that the page is the SAME color as the curtain, so the tail of the
+    // sweep is invisible — the eye sees a single wash of color, not a double swish.
     el.style.setProperty('--curtain-color', targetColor);
     el.style.visibility = 'visible';
     el.style.pointerEvents = 'auto';
-    const cover = animate(el, { x: ['101%', '0%'] }, { duration: 0.34, ease: [0.83, 0, 0.17, 1] });
+
+    const DURATION = 0.62;
+    // The curtain passes exactly over the screen centre (fully covering it) at
+    // half the duration, so we flip the theme there. After that the page is the
+    // same colour as the curtain, so the tail of the sweep is invisible.
+    const timer = window.setTimeout(() => setThemeState(next), (DURATION / 2) * 1000);
+    const anim = animate(el, { x: [W, -W] }, { duration: DURATION, ease: [0.83, 0, 0.17, 1] });
 
     return new Promise<void>((resolve) => {
-      cover.then(() => {
-        // Phase 2: on the covered moment, flip the real theme.
-        setThemeState(next);
-        // Phase 3: sweep the curtain away to the left, revealing the new theme.
-        const reveal = animate(el, { x: ['0%', '-101%'] }, { duration: 0.5, ease: [0.83, 0, 0.17, 1] });
-        reveal.then(() => {
-          el.style.pointerEvents = 'none';
-          el.style.visibility = 'hidden';
-          resolve();
-        });
+      anim.then(() => {
+        window.clearTimeout(timer);
+        el.style.pointerEvents = 'none';
+        el.style.visibility = 'hidden';
+        resolve();
       });
     });
   }, [theme, reduce]);

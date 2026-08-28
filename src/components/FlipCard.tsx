@@ -3,24 +3,21 @@ import type { Metric } from '../types';
 import { categoryById } from '../data/taxonomy';
 import { metricName } from '../data/metrics';
 
-export function FlipCard({ metric, flipped, onFlip }: { metric: Metric; flipped: boolean; onFlip: (v: boolean) => void }) {
+/** Презентационная карточка: только визуальный flip. Вся интерактивность — в SwipeDeck. */
+export function FlipCard({ metric, flipped }: { metric: Metric; flipped: boolean }) {
   const cat = categoryById[metric.categoryId];
   const reduce = useReducedMotion();
   const confused = metric.confusedWith.slice(0, 4);
 
   return (
-    <motion.button
-      type="button"
-      className="flip-card"
-      onClick={() => onFlip(!flipped)}
-      onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); onFlip(!flipped); } }}
-      animate={{ rotateY: flipped ? 180 : 0 }}
-      transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-      aria-pressed={flipped}
-      aria-label={flipped ? 'Показать лицевую сторону' : 'Перевернуть и посмотреть ответ'}
-      title="Нажми, чтобы перевернуть"
-    >
-      <div className="flip-inner">
+    <div className="flip-scene">
+      {/* The rotating element IS the preserve-3d parent of the two faces. */}
+      <motion.div
+        className="flip-face-wrap"
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+        aria-hidden="true"
+      >
         {/* FRONT */}
         <div className="flip-face flip-front card" style={{ padding: 'var(--sp-6)' }}>
           <div className="flip-top">
@@ -52,7 +49,7 @@ export function FlipCard({ metric, flipped, onFlip }: { metric: Metric; flipped:
             </div>
           </div>
         </div>
-      </div>
-    </motion.button>
+      </motion.div>
+    </div>
   );
 }

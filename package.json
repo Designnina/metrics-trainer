@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "open": "vite --open /metrics-trainer/",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint ."
