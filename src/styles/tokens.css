@@ -49,41 +49,41 @@
   --max-w: 460px;
 }
 
-/* LIGHT — warm paper, tinted (never pure white) */
+/* LIGHT — monochrome white/grey (chroma 0, no warm tint) */
 :root, [data-theme="light"] {
   color-scheme: light;
-  --bg: oklch(97% 0.012 95);
-  --bg-deep: oklch(94% 0.014 95);
-  --surface: oklch(99% 0.006 95);
-  --surface-2: oklch(96% 0.012 95);
-  --ink: oklch(25% 0.02 95);
-  --ink-2: oklch(45% 0.02 95);
-  --ink-3: oklch(58% 0.015 95);
-  --rule: oklch(25% 0.02 95 / 0.12);
-  --rule-strong: oklch(25% 0.02 95 / 0.24);
-  --accent: oklch(38% 0.13 155);
-  --accent-soft: oklch(94% 0.04 155);
-  --warn: oklch(48% 0.14 30);
-  --warn-soft: oklch(95% 0.035 40);
-  --shadow: 0 10px 40px -18px oklch(20% 0.02 95 / 0.25);
+  --bg: oklch(97.5% 0 0);
+  --bg-deep: oklch(94% 0 0);
+  --surface: oklch(99.5% 0 0);
+  --surface-2: oklch(95.5% 0 0);
+  --ink: oklch(24% 0 0);
+  --ink-2: oklch(45% 0 0);
+  --ink-3: oklch(61% 0 0);
+  --rule: oklch(24% 0 0 / 0.12);
+  --rule-strong: oklch(24% 0 0 / 0.28);
+  --accent: oklch(24% 0 0);
+  --accent-soft: oklch(96% 0 0);
+  --warn: oklch(52% 0 0);
+  --warn-soft: oklch(94% 0 0);
+  --shadow: 0 10px 40px -18px oklch(20% 0 0 / 0.22);
 }
 
-/* DARK — lacquer / mineral, tinted (never pure black) */
+/* DARK — monochrome black/grey (chroma 0) */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: oklch(16% 0.014 95);
-  --bg-deep: oklch(12% 0.012 95);
-  --surface: oklch(21% 0.014 95);
-  --surface-2: oklch(24% 0.014 95);
-  --ink: oklch(91% 0 0);
-  --ink-2: oklch(74% 0.01 95);
-  --ink-3: oklch(56% 0.01 95);
+  --bg: oklch(15% 0 0);
+  --bg-deep: oklch(11% 0 0);
+  --surface: oklch(19% 0 0);
+  --surface-2: oklch(23.5% 0 0);
+  --ink: oklch(92% 0 0);
+  --ink-2: oklch(72% 0 0);
+  --ink-3: oklch(54% 0 0);
   --rule: oklch(92% 0 0 / 0.1);
-  --rule-strong: oklch(92% 0 0 / 0.2);
-  --accent: oklch(72% 0.13 158);
-  --accent-soft: oklch(28% 0.03 158);
-  --warn: oklch(64% 0.13 32);
-  --warn-soft: oklch(27% 0.03 30);
+  --rule-strong: oklch(92% 0 0 / 0.22);
+  --accent: oklch(92% 0 0);
+  --accent-soft: oklch(26% 0 0);
+  --warn: oklch(64% 0 0);
+  --warn-soft: oklch(24% 0 0);
   --shadow: 0 14px 50px -20px oklch(0% 0 0 / 0.7);
 }
 
@@ -108,9 +108,11 @@ a { color: inherit; text-decoration: none; }
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
 
-/* Curtain overlay template */
+/* Curtain overlay — hidden off-screen by default, only sweeps in during a theme switch */
 .theme-curtain {
   position: fixed; inset: 0; z-index: 100;
   pointer-events: none;
   background: var(--curtain-color, var(--bg));
+  transform: translateX(101%);
+  visibility: hidden;
 }

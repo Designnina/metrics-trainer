@@ -44,19 +44,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       .getPropertyValue(next === 'dark' ? '--bg-deep' : '--bg')
       .trim() || 'oklch(12% 0.012 95)';
 
-    // Phase 1: cover the screen with the NEW theme's curtain, from the right.
+    // Phase 1: cover the screen with the NEW theme's curtain, sweeping in from the right.
     el.style.setProperty('--curtain-color', targetColor);
+    el.style.visibility = 'visible';
     el.style.pointerEvents = 'auto';
-    const cover = animate(el, { x: ['100%', '0%'] }, { duration: 0.34, ease: [0.83, 0, 0.17, 1] });
+    const cover = animate(el, { x: ['101%', '0%'] }, { duration: 0.34, ease: [0.83, 0, 0.17, 1] });
 
     return new Promise<void>((resolve) => {
       cover.then(() => {
         // Phase 2: on the covered moment, flip the real theme.
         setThemeState(next);
         // Phase 3: sweep the curtain away to the left, revealing the new theme.
-        const reveal = animate(el, { x: ['0%', '-100%'] }, { duration: 0.5, ease: [0.83, 0, 0.17, 1] });
+        const reveal = animate(el, { x: ['0%', '-101%'] }, { duration: 0.5, ease: [0.83, 0, 0.17, 1] });
         reveal.then(() => {
           el.style.pointerEvents = 'none';
+          el.style.visibility = 'hidden';
           resolve();
         });
       });
