@@ -76,12 +76,16 @@
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
+/* Narrow content column — the ONE grid for Learn */
+.narrow { width: 100%; max-width: var(--content-narrow); margin-inline: auto; }
+
 /* ---------- Page head — editorial, spatial ---------- */
 .screen-head { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 12px 24px; margin-bottom: 8px; }
 .screen-meta { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .screen-count { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); white-space: nowrap; justify-self: end; font-variant-numeric: tabular-nums; }
-.screen-title { grid-column: 1 / -1; font-family: var(--font-display); font-size: var(--t-title); font-weight: 700; letter-spacing: -0.03em; line-height: 0.95; margin-top: 10px; }
+.screen-title { grid-column: 1 / -1; font-family: var(--font-display); font-size: var(--t-title); font-weight: 500; letter-spacing: -0.015em; line-height: 0.98; margin-top: 10px; }
 .screen-sub { max-width: 56ch; color: var(--ink-2); font-size: var(--t-16); line-height: 1.5; margin-top: 18px; font-family: var(--font-sans); }
+.card-counter { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); text-align: right; margin: 0 0 14px; font-variant-numeric: tabular-nums; }
 
 /* ---------- Type primitives — expressive via scale/spacing, not mono ---------- */
 .eyebrow, .tech { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
@@ -253,16 +257,15 @@
 .flip-scene { perspective: 1600px; }
 .flip-scene, .flip-face-wrap { width: 100%; }
 .flip-face-wrap { position: relative; min-height: clamp(420px, 56vh, 500px); transform-style: preserve-3d; }
-.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; }
-.flip-front { position: relative; flex-direction: column; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: clamp(24px, 4vw, 36px); }
-.flip-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+.flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; }
+.flip-front { flex-direction: column; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: clamp(24px, 4vw, 36px); }
+.flip-back { transform: rotateY(180deg); }
 
-/* FRONT — minimal, typographic */
-.f-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
-.f-name { margin-top: 26px; font-family: var(--font-sans); font-size: clamp(20px, 3vw, 26px); font-weight: 600; letter-spacing: -0.015em; line-height: 1.15; }
+/* FRONT — minimal, typographic, question centred in remaining space */
+.f-name { font-family: var(--font-sans); font-size: clamp(18px, 2.5vw, 22px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; color: var(--ink-2); }
 .f-rule { height: 1px; background: var(--rule); margin: 18px 0; }
-.f-q { font-family: var(--font-sans); font-size: var(--t-question); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
-.f-foot { margin-top: auto; padding-top: 28px; display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.f-q-wrap { flex: 1; display: flex; align-items: center; padding: 8px 0 12px; }
+.f-q { font-family: var(--font-sans); font-size: var(--t-question); font-weight: 600; letter-spacing: -0.02em; line-height: 1.12; }
 
 /* BACK — editorial sections, thin dividers */
 .flip-back-card { width: 100%; height: 100%; flex-direction: column; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: clamp(24px, 4vw, 36px); }
@@ -280,9 +283,6 @@
    SWIPE DECK — editorial, asymmetric
    ============================================================ */
 .deck { width: 100%; max-width: var(--card-w); margin-inline: auto; }
-@media (min-width: 1024px) {
-  .deck { margin-left: 0; }
-}
 .deck-stack { position: relative; }
 .behind {
   position: absolute; inset: 0; border-radius: var(--r-lg);

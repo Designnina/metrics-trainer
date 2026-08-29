@@ -25,7 +25,9 @@ export function FlipCard({ metric, flipped, index }: Props) {
         <div className="flip-face flip-front">
           <div className="f-name">{metric.name}</div>
           <div className="f-rule" />
-          <div className="f-q">{metric.tagline}</div>
+          <div className="f-q-wrap">
+            <div className="f-q">{metric.tagline}</div>
+          </div>
         </div>
 
         {/* BACK — structured editorial sections */}

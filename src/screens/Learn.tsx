@@ -31,32 +31,37 @@ export function Learn() {
 
   return (
     <div className="screen">
-      <header className="screen-head">
-        <h1 className="screen-title">Свайп—<br />карточки</h1>
-        <span className="screen-count">{String(safeIdx + 1).padStart(2, '0')} — {String(deck.length).padStart(2, '0')}</span>
-      </header>
+      <div className="narrow">
+        <header className="screen-head">
+          <h1 className="screen-title">Свайп—<br />карточки</h1>
+        </header>
 
-      <div className="filters" role="tablist" aria-label="Фильтр по группам">
-        <button role="tab" aria-selected={filter === 'all'} className={`f-tab ${filter === 'all' ? 'on' : ''}`} onClick={() => { setFilter('all'); setIdx(0); }}>All</button>
-        {families.map(f => (
-          <button key={f.id} role="tab" aria-selected={filter === f.id} className={`f-tab ${filter === f.id ? 'on' : ''}`} onClick={() => { setFilter(f.id); setIdx(0); }}>
-            {f.title}
-          </button>
-        ))}
-      </div>
-
-      <div className="mastery" aria-label="Прогресс освоения">
-        <div className="m-rule" role="progressbar" aria-valuenow={masteryPct} aria-valuemin={0} aria-valuemax={100}>
-          <div className="m-fill" style={{ width: `${masteryPct}%` }} />
+        <div className="filters" role="tablist" aria-label="Фильтр по группам">
+          <button role="tab" aria-selected={filter === 'all'} className={`f-tab ${filter === 'all' ? 'on' : ''}`} onClick={() => { setFilter('all'); setIdx(0); }}>All</button>
+          {families.map(f => (
+            <button key={f.id} role="tab" aria-selected={filter === f.id} className={`f-tab ${filter === f.id ? 'on' : ''}`} onClick={() => { setFilter(f.id); setIdx(0); }}>
+              {f.title}
+            </button>
+          ))}
         </div>
-      </div>
 
-      <SwipeDeck
-        deck={deck}
-        index={safeIdx}
-        onIndex={setIdx}
-        onResult={(mid, known) => answer(mid, known, known ? undefined : (deck[safeIdx]?.confusedWith[0] ?? undefined))}
-      />
+        <div className="mastery" aria-label="Прогресс освоения">
+          <div className="m-rule" role="progressbar" aria-valuenow={masteryPct} aria-valuemin={0} aria-valuemax={100}>
+            <div className="m-fill" style={{ width: `${masteryPct}%` }} />
+          </div>
+        </div>
+
+        <div className="card-counter">
+          <span>{String(safeIdx + 1).padStart(2, '0')} — {String(deck.length).padStart(2, '0')}</span>
+        </div>
+
+        <SwipeDeck
+          deck={deck}
+          index={safeIdx}
+          onIndex={setIdx}
+          onResult={(mid, known) => answer(mid, known, known ? undefined : (deck[safeIdx]?.confusedWith[0] ?? undefined))}
+        />
+      </div>
     </div>
   );
 }

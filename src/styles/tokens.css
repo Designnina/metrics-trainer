@@ -31,10 +31,10 @@
   --t-56: 3.5rem;
   --t-64: 4rem;
 
-  /* Display & card type — expressive via scale/spacing, not mono labels */
-  --t-title: clamp(2.375rem, 8vw, 4.5rem);
-  --t-question: clamp(1.9rem, 5.5vw, 2.75rem);
-  --t-section: clamp(1.5rem, 3vw, 2rem);
+  /* Display — editorial, not logo-like */
+  --t-title: clamp(2rem, 5vw, 3.5rem);
+  --t-question: clamp(1.5rem, 3.5vw, 2.125rem);
+  --t-section: clamp(1.375rem, 2.5vw, 1.75rem);
 
   /* Rhythm */
   --sp-1: 4px;
@@ -63,13 +63,14 @@
   --dur-ui: 240ms;
   --dur-card: 420ms;
 
-  /* Layout */
-  --rail-w: 84px;
+  /* Layout — one coherent grid */
+  --rail-w: 116px;
   --tabbar-h: 60px;
   --gutter: 20px;
   --gutter-lg: clamp(32px, 5vw, 64px);
-  --content-w: 1080px;
-  --card-w: min(100%, 720px);
+  --content-w: 1120px;
+  --card-w: min(100%, 680px);
+  --content-narrow: 680px;
 }
 
 /* LIGHT — cold off-white, mono + single cobalt signal (same both themes) */
