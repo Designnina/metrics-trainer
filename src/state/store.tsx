@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 import type { AppState, MetricProgress } from '../types';
-import { metrics } from '../data/metrics';
+import { cards } from '../data/cards';
 import { blankProgress, recordAnswer, markSeen, markHard } from './spacedRepetition';
 
-const STORAGE_KEY = 'metrics-trainer-v1';
+const STORAGE_KEY = 'metrics-trainer-cards-v1';
 
 type Action =
   | { type: 'answer'; metricId: string; correct: boolean; confusedMetricId?: string }
@@ -13,7 +13,7 @@ type Action =
 
 function freshState(): AppState {
   const progress: Record<string, MetricProgress> = {};
-  for (const m of metrics) progress[m.id] = blankProgress(m.id);
+  for (const c of cards) progress[c.id] = blankProgress(c.id);
   return { progress, answered: 0, correct: 0, streak: 0, bestStreak: 0, lastAnswerCorrect: null };
 }
 
@@ -23,8 +23,8 @@ function loadState(): AppState {
     if (raw) {
       const parsed = JSON.parse(raw) as AppState;
       const progress: Record<string, MetricProgress> = {};
-      for (const m of metrics) {
-        progress[m.id] = { ...blankProgress(m.id), ...(parsed.progress?.[m.id] ?? {}) };
+      for (const c of cards) {
+        progress[c.id] = { ...blankProgress(c.id), ...(parsed.progress?.[c.id] ?? {}) };
       }
       return { ...freshState(), ...parsed, progress };
     }
@@ -104,8 +104,8 @@ export function accuracy(state: AppState): number {
 }
 
 export function masteredCount(state: AppState): number {
-  return metrics.filter(m => (state.progress[m.id]?.level ?? 0) >= 5).length;
+  return cards.filter(c => (state.progress[c.id]?.level ?? 0) >= 5).length;
 }
 export function seenCount(state: AppState): number {
-  return metrics.filter(m => state.progress[m.id]?.seen).length;
+  return cards.filter(c => state.progress[c.id]?.seen).length;
 }

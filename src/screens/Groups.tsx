@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { families, categoriesByFamily } from '../data/taxonomy';
-import { metricsByFamily } from '../data/metrics';
+import { groups, domainsByGroup } from '../data/taxonomy';
+import { cardsByGroup } from '../data/cards';
 import { useStore } from '../state/store';
 
 export function Groups() {
@@ -8,25 +8,24 @@ export function Groups() {
   return (
     <div className="screen">
       <header className="screen-head">
-        <h1 className="screen-title">Группы<br />метрик</h1>
+        <h1 className="screen-title">Группы<br />карточек</h1>
       </header>
       <p className="screen-sub">
-        Пять семейств: продукт, бизнес, UX, юзабилити и эксперименты. Выберите группу, чтобы изучать её отдельно.
+        Пять направлений и восемнадцать доменов профессиональной лексики: метрики, эксперименты, исследования, дизайн, доставка, бизнес, технический и AI-словарь.
       </p>
 
       <div style={{ marginTop: 40 }}>
-        {families.map((f, fi) => {
-          const ms = metricsByFamily(f.id);
-          const cats = categoriesByFamily(f.id);
-          const mastered = ms.filter(m => (state.progress[m.id]?.level ?? 0) >= 5).length;
+        {groups.map((g, gi) => {
+          const ms = cardsByGroup(g.id);
+          const mastered = ms.filter(c => (state.progress[c.id]?.level ?? 0) >= 5).length;
           return (
-            <Link to={`/library?f=${f.id}`} key={f.id} className="li li-link">
-              <span className="li-num">{String(fi + 1).padStart(2, '0')}</span>
+            <Link to={`/library?f=${g.id}`} key={g.id} className="li li-link">
+              <span className="li-num">{String(gi + 1).padStart(2, '0')}</span>
               <span className="grow">
-                <span className="li-name">{f.title} <span style={{ fontWeight: 400, color: 'var(--ink-3)', fontSize: 'var(--t-15)' }}>· {f.subtitle}</span></span>
-                <div className="li-meta">{f.description}</div>
+                <span className="li-name">{g.title}</span>
+                <div className="li-meta">{ms.length} карточек · {g.domains.length} доменов</div>
                 <div className="tag-row" style={{ marginTop: 10 }}>
-                  {cats.map(c => <span key={c.id} className="chip">{c.title}</span>)}
+                  {domainsByGroup(g.id).map(d => <span key={d.id} className="chip">{d.title}</span>)}
                 </div>
               </span>
               <span className="li-right">{mastered}/{ms.length}</span>

@@ -1,36 +1,49 @@
-import type { Family, Category } from '../types';
+import type { CardGroup } from '../types';
 
-export const families: Family[] = [
-  { id: 'product', title: 'PRODUCT', subtitle: 'Продуктовые', description: 'Фанелы, активация, вовлечённость, удержание, виральность — что происходит с пользователем в продукте.', color: '#111' },
-  { id: 'business', title: 'BUSINESS', subtitle: 'Бизнесовые', description: 'Монетизация, стоимость привлечения, юнит-экономика и рынок.', color: '#333' },
-  { id: 'ux', title: 'UX', subtitle: 'Восприятие', description: 'Как пользователь воспринимает опыт: удовлетворённость и лояльность.', color: '#555' },
-  { id: 'usability', title: 'USABILITY', subtitle: 'Юзабилити', description: 'Можно ли выполнить задачу: успешность, время, ошибки, обучаемость.', color: '#777' },
-  { id: 'experimentation', title: 'EXPERIMENT', subtitle: 'Эксперименты', description: 'Корректность выводов: значимость, выборка, guardrails.', color: '#999' },
+export interface Domain {
+  id: string;      // '01'..'18'
+  title: string;   // 'Product Metrics & Lifecycle'
+  group: CardGroup;
+}
+
+export interface Group {
+  id: CardGroup;
+  title: string;
+  domains: string[]; // domain ids
+}
+
+export const groups: Group[] = [
+  { id: 'product', title: 'Product', domains: ['01', '02', '03', '04', '07', '08', '09'] },
+  { id: 'ux-research', title: 'UX Research', domains: ['05', '06'] },
+  { id: 'design', title: 'Design', domains: ['10', '11', '12', '13', '14'] },
+  { id: 'delivery-business', title: 'Delivery & Business', domains: ['15', '16'] },
+  { id: 'tech-ai', title: 'Tech & AI', domains: ['17', '18'] },
 ];
 
-export const categories: Category[] = [
-  // PRODUCT
-  { id: 'p-funnel', family: 'product', title: 'Funnel', description: 'Переходы между шагами воронки' },
-  { id: 'p-activation', family: 'product', title: 'Activation', description: 'Первый ценностный опыт' },
-  { id: 'p-engagement', family: 'product', title: 'Engagement', description: 'Регулярность и глубина использования' },
-  { id: 'p-retention', family: 'product', title: 'Retention', description: 'Возвраты и отток во времени' },
-  { id: 'p-growth', family: 'product', title: 'Growth', description: 'Виральность и реферальность' },
-  // BUSINESS
-  { id: 'b-monetization', family: 'business', title: 'Monetization', description: 'Выручка на пользователя и подписки' },
-  { id: 'b-acquisition', family: 'business', title: 'Acquisition', description: 'Стоимость привлечения' },
-  { id: 'b-efficiency', family: 'business', title: 'Efficiency', description: 'Юнит-экономика' },
-  { id: 'b-market', family: 'business', title: 'Market', description: 'Доля и проникновение' },
-  // UX
-  { id: 'ux-perceived', family: 'ux', title: 'Perceived Quality', description: 'Оценка опыта' },
-  { id: 'ux-loyalty', family: 'ux', title: 'Satisfaction & Loyalty', description: 'Лояльность и усилия' },
-  // USABILITY
-  { id: 'u-task', family: 'usability', title: 'Task Performance', description: 'Эффективность выполнения' },
-  { id: 'u-learn', family: 'usability', title: 'Learnability', description: 'Обучаемость и поиск' },
-  // EXPERIMENTATION
-  { id: 'e-design', family: 'experimentation', title: 'Test Design', description: 'Планирование эксперимента' },
-  { id: 'e-results', family: 'experimentation', title: 'Test Results', description: 'Интерпретация результатов' },
+export const domains: Domain[] = [
+  { id: '01', title: 'Product Metrics & Lifecycle', group: 'product' },
+  { id: '02', title: 'Growth, Revenue & Unit Economics', group: 'product' },
+  { id: '03', title: 'Product Analytics & Instrumentation', group: 'product' },
+  { id: '04', title: 'Experimentation & Statistics', group: 'product' },
+  { id: '05', title: 'UX & Usability Metrics', group: 'ux-research' },
+  { id: '06', title: 'User Research', group: 'ux-research' },
+  { id: '07', title: 'Product Discovery & Problem Framing', group: 'product' },
+  { id: '08', title: 'Strategy, Roadmaps & Prioritization', group: 'product' },
+  { id: '09', title: 'Core Product Frameworks', group: 'product' },
+  { id: '10', title: 'Information Architecture & Content Design', group: 'design' },
+  { id: '11', title: 'Interaction & Behavioral Design', group: 'design' },
+  { id: '12', title: 'UI & Visual Design', group: 'design' },
+  { id: '13', title: 'Design Systems', group: 'design' },
+  { id: '14', title: 'Accessibility & Inclusive Design', group: 'design' },
+  { id: '15', title: 'Delivery & Cross-functional Collaboration', group: 'delivery-business' },
+  { id: '16', title: 'Business, Freelance & Client Work', group: 'delivery-business' },
+  { id: '17', title: 'Technical & Web Vocabulary', group: 'tech-ai' },
+  { id: '18', title: 'AI Product & LLM Vocabulary', group: 'tech-ai' },
 ];
 
-export const familyById = Object.fromEntries(families.map(f => [f.id, f])) as Record<string, Family>;
-export const categoryById = Object.fromEntries(categories.map(c => [c.id, c])) as Record<string, Category>;
-export const categoriesByFamily = (fid: string) => categories.filter(c => c.family === fid);
+export const domainById = Object.fromEntries(domains.map(d => [d.id, d])) as Record<string, Domain>;
+export const groupById = Object.fromEntries(groups.map(g => [g.id, g])) as Record<string, Group>;
+
+export const domainTitle = (id: string): string => domainById[id]?.title ?? id;
+export const groupTitle = (id: string): string => groupById[id]?.title ?? id;
+export const domainsByGroup = (g: CardGroup): Domain[] => domains.filter(d => d.group === g);

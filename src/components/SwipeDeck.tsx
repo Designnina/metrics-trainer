@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useReducedMotion, useTransform, animate } from 'motion/react';
-import type { Metric } from '../types';
+import type { TrainingCard } from '../types';
+import { domainTitle } from '../data/taxonomy';
 import { FlipCard } from './FlipCard';
 
 interface SwipeDeckProps {
-  deck: Metric[];
+  deck: TrainingCard[];
   index: number;
   onIndex: (i: number) => void;
   onResult: (metricId: string, known: boolean) => void;
@@ -14,7 +15,7 @@ const THRESHOLD = 110;
 const TAP_SLOP = 10;
 
 export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
-  const metric = deck[index];
+  const card = deck[index];
   const next = deck[index + 1];
   const reduce = useReducedMotion();
   const [flipped, setFlipped] = useState(false);
@@ -35,8 +36,8 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
   };
 
   const commit = (dir: 'known' | 'unknown') => {
-    if (!metric) return;
-    onResult(metric.id, dir === 'known');
+    if (!card) return;
+    onResult(card.id, dir === 'known');
     setFlipped(false);
     const flyX = dir === 'known' ? 560 : -560;
     const out = animate(x, flyX, { duration: 0.26, ease: [0.5, 0, 0.75, 0.2] });
@@ -87,16 +88,16 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [index, metric?.id, reduce]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [index, card?.id, reduce]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!metric) return null;
+  if (!card) return null;
 
   return (
     <div className="deck">
       <div className="deck-stack">
         {next && (
           <div className="behind" aria-hidden="true" style={{ transform: 'scale(0.97) translateY(14px)', opacity: 0.5 }}>
-            <span className="behind-name">{next.name}</span>
+            <span className="behind-name">{domainTitle(next.category)}</span>
           </div>
         )}
 
@@ -122,7 +123,7 @@ export function SwipeDeck({ deck, index, onIndex, onResult }: SwipeDeckProps) {
           <motion.div className="swipe-overlay unknown" style={{ opacity: unknownOpacity }}>
             <span className="tag unknown">Не знаю</span>
           </motion.div>
-          <FlipCard metric={metric} flipped={flipped} index={index} />
+          <FlipCard card={card} flipped={flipped} index={index} />
         </motion.div>
       </div>
 

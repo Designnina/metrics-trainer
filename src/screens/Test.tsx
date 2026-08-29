@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { questions } from '../data/questions';
 import { useStore } from '../state/store';
 import { OptionList } from '../components/OptionList';
-import { metricName } from '../data/metrics';
+import { cardName } from '../data/cards';
 import type { TestQuestion } from '../types';
 
 export function Test() {
@@ -114,7 +114,7 @@ export function Test() {
         </>
       )}
 
-      <div style={{ marginTop: 26, fontSize: 'var(--t-13)', color: 'var(--ink-3)', fontFamily: 'var(--font-sans)' }}>Темы: {primary.metricIds.map(metricName).join(' · ')}</div>
+      <div style={{ marginTop: 26, fontSize: 'var(--t-13)', color: 'var(--ink-3)', fontFamily: 'var(--font-sans)' }}>Темы: {primary.metricIds.map(cardName).join(' · ')}</div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { metrics } from '../data/metrics';
-import { families } from '../data/taxonomy';
+import { cards } from '../data/cards';
+import { groups } from '../data/taxonomy';
 import { useStore } from '../state/store';
 import { duePriority } from '../state/spacedRepetition';
 import { SwipeDeck } from '../components/SwipeDeck';
@@ -13,21 +13,21 @@ export function Learn() {
   const [idx, setIdx] = useState(0);
 
   const deck = useMemo(() => {
-    let list = metrics;
-    if (filter !== 'all') list = list.filter(m => m.family === filter);
+    let list = cards;
+    if (filter !== 'all') list = list.filter(c => c.group === filter);
     const probe = { level: 0, seen: false, lastSeen: 0, correct: 0, wrong: 0, streak: 0, confused: {}, isHard: false, interval: 0, dueAt: 0 };
     return [...list].sort((a, b) => duePriority(state.progress[b.id] ?? probe, false) - duePriority(state.progress[a.id] ?? probe, false));
   }, [filter, state.progress]);
 
   const safeIdx = Math.min(idx, deck.length - 1);
-  const seenInDeck = deck.filter(m => state.progress[m.id]?.seen).length;
+  const seenInDeck = deck.filter(c => state.progress[c.id]?.seen).length;
   const masteryPct = deck.length ? Math.round((seenInDeck / deck.length) * 100) : 0;
 
   useEffect(() => {
     if (deck.length) seen(deck[Math.min(idx, deck.length - 1)].id);
   }, [idx, filter, deck.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!deck.length) return <div className="empty">Нет метрик для изучения.</div>;
+  if (!deck.length) return <div className="empty">Нет карточек для изучения.</div>;
 
   return (
     <div className="screen">
@@ -38,9 +38,9 @@ export function Learn() {
 
         <div className="filters" role="tablist" aria-label="Фильтр по группам">
           <button role="tab" aria-selected={filter === 'all'} className={`f-tab ${filter === 'all' ? 'on' : ''}`} onClick={() => { setFilter('all'); setIdx(0); }}>All</button>
-          {families.map(f => (
-            <button key={f.id} role="tab" aria-selected={filter === f.id} className={`f-tab ${filter === f.id ? 'on' : ''}`} onClick={() => { setFilter(f.id); setIdx(0); }}>
-              {f.title}
+          {groups.map(g => (
+            <button key={g.id} role="tab" aria-selected={filter === g.id} className={`f-tab ${filter === g.id ? 'on' : ''}`} onClick={() => { setFilter(g.id); setIdx(0); }}>
+              {g.title}
             </button>
           ))}
         </div>
@@ -52,14 +52,14 @@ export function Learn() {
         </div>
 
         <div className="card-counter">
-          <span>{String(safeIdx + 1).padStart(2, '0')} — {String(deck.length).padStart(2, '0')}</span>
+          <span>{String(safeIdx + 1).padStart(2, '0')} — {String(deck.length).padStart(3, '0')}</span>
         </div>
 
         <SwipeDeck
           deck={deck}
           index={safeIdx}
           onIndex={setIdx}
-          onResult={(mid, known) => answer(mid, known, known ? undefined : (deck[safeIdx]?.confusedWith[0] ?? undefined))}
+          onResult={(mid, known) => answer(mid, known, known ? undefined : undefined)}
         />
       </div>
     </div>

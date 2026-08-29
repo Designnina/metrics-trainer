@@ -1,3 +1,21 @@
+export type CardLevel = 'foundation' | 'practice' | 'advanced';
+export type CardMode = 'recall' | 'distinction' | 'application' | 'interpretation';
+export type CardGroup = 'product' | 'ux-research' | 'design' | 'delivery-business' | 'tech-ai';
+
+export interface TrainingCard {
+  id: string;
+  category: string; // domain number: '01'..'18'
+  group: CardGroup;
+  level: CardLevel;
+  mode: CardMode;
+  frontQuestion: string;
+  frontScenario: string;
+  answer: string;
+  backInfo: string;
+  formula?: string;
+  aliases?: string[];
+}
+
 export type FamilyId = 'product' | 'business' | 'ux' | 'usability' | 'experimentation';
 
 export interface Family {

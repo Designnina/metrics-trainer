@@ -1,5 +1,5 @@
-import { families } from '../data/taxonomy';
-import { metrics } from '../data/metrics';
+import { groups } from '../data/taxonomy';
+import { cards, cardsByGroup } from '../data/cards';
 import { accuracy, masteredCount, seenCount, useStore } from '../state/store';
 
 export function Progress() {
@@ -7,26 +7,26 @@ export function Progress() {
   const acc = accuracy(state);
   const mastered = masteredCount(state);
   const seen = seenCount(state);
-  const pct = metrics.length ? Math.round((seen / metrics.length) * 100) : 0;
+  const pct = cards.length ? Math.round((seen / cards.length) * 100) : 0;
 
-  const weak = metrics
-    .filter(m => (state.progress[m.id]?.wrong ?? 0) > 0)
-    .map(m => ({ m, w: state.progress[m.id].wrong, c: state.progress[m.id].correct }))
-    .sort((a, b) => (b.w - b.c) - (a.w - a.c))
+  const weak = cards
+    .filter(c => (state.progress[c.id]?.wrong ?? 0) > 0)
+    .map(c => ({ c, w: state.progress[c.id].wrong, ok: state.progress[c.id].correct }))
+    .sort((a, b) => (b.w - b.ok) - (a.w - a.ok))
     .slice(0, 5);
 
   const confusedPairs: { a: string; b: string; n: number }[] = [];
-  for (const m of metrics) {
-    const p = state.progress[m.id];
+  for (const c of cards) {
+    const p = state.progress[c.id];
     if (!p) continue;
     for (const [other, n] of Object.entries(p.confused)) {
-      if (n >= 2) confusedPairs.push({ a: m.name, b: metrics.find(x => x.id === other)?.name ?? other, n });
+      if (n >= 2) confusedPairs.push({ a: c.answer, b: cards.find(x => x.id === other)?.answer ?? other, n });
     }
   }
   const topPairs = confusedPairs.sort((x, y) => y.n - x.n).slice(0, 4);
 
   const stats = [
-    { num: seen, unit: `/${metrics.length}`, lbl: 'Метрик изучено' },
+    { num: seen, unit: `/${cards.length}`, lbl: 'Карточек изучено' },
     { num: mastered, unit: '', lbl: 'Освоено' },
     { num: state.answered, unit: '', lbl: 'Ответов' },
     { num: acc, unit: '%', lbl: 'Точность' },
@@ -59,14 +59,14 @@ export function Progress() {
       <div className="sec-gap">
         <div className="sec-label">По группам</div>
         <div className="stack" style={{ gap: 24 }}>
-          {families.map(f => {
-            const ms = metrics.filter(m => m.family === f.id);
-            const done = ms.filter(m => state.progress[m.id]?.seen).length;
+          {groups.map(g => {
+            const ms = cardsByGroup(g.id);
+            const done = ms.filter(c => state.progress[c.id]?.seen).length;
             const fp = ms.length ? Math.round((done / ms.length) * 100) : 0;
             return (
-              <div key={f.id}>
+              <div key={g.id}>
                 <div className="m-row" style={{ marginBottom: 10 }}>
-                  <span className="m-label">{f.title}</span>
+                  <span className="m-label">{g.title}</span>
                   <span className="m-pct">{done}/{ms.length} · {fp}%</span>
                 </div>
                 <div className="pr-track"><div className="pr-fill" style={{ width: `${fp}%` }} /></div>
@@ -77,17 +77,17 @@ export function Progress() {
       </div>
 
       <div className="sec-gap">
-        <div className="sec-label">Слабые метрики</div>
+        <div className="sec-label">Слабые карточки</div>
         {weak.length === 0 ? (
           <div className="empty" style={{ padding: '32px 0' }}>Пока нет слабых мест — отвечайте в Test.</div>
         ) : (
           <div className="list">
-            {weak.map(({ m, w, c }) => (
-              <div className="li" key={m.id} style={{ cursor: 'default' }}>
+            {weak.map(({ c, w, ok }) => (
+              <div className="li" key={c.id} style={{ cursor: 'default' }}>
                 <span className="li-num">{String(w).padStart(2, '0')}</span>
                 <span className="grow">
-                  <span className="li-name">{m.name}</span>
-                  <div className="li-meta">ошибок {w} · верно {c}</div>
+                  <span className="li-name">{c.answer}</span>
+                  <div className="li-meta">ошибок {w} · верно {ok}</div>
                 </span>
               </div>
             ))}

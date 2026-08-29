@@ -3,7 +3,7 @@ import type { TestQuestion } from '../types';
 export const questions: TestQuestion[] = [
 
 // ═══ LEVEL 1 · RECOGNITION ════════════════════════════════════════
-{ id: 'q1', type: 'identify', level: 1, metricIds: ['conversion-rate'],
+{ id: 'q1', type: 'identify', level: 1, metricIds: ['pm-14'],
   prompt: 'Какая метрика измеряет долю пользователей, перешедших из состояния A в состояние B?',
   situation: 'Вы работаете с воронкой: пользователи видят товар → добавляют в корзину → платят.',
   options: [
@@ -15,7 +15,7 @@ export const questions: TestQuestion[] = [
   why: 'Conversion Rate — это доля перешедших между двумя состояниями воронки.',
   whyNot: { a: 'Retention измеряет возврат во времени, а не переход между шагами.', c: 'DAU — число уникальных за день, без переходов.', d: 'NPS — лояльность и рекомендации.' } },
 
-{ id: 'q2', type: 'identify', level: 1, metricIds: ['churn-rate'],
+{ id: 'q2', type: 'identify', level: 1, metricIds: ['pm-03'],
   prompt: 'Как называется доля пользователей, покинувших продукт за период?',
   situation: 'За месяц из 1000 подписчиков отписались 150.',
   options: [
@@ -28,7 +28,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'Conversion — переходы между шагами, а не уход.', c: 'ARPU — выручка на пользователя.', d: 'SUS — опросник удобства интерфейса.' } },
 
 // ═══ LEVEL 2 · UNDERSTANDING ══════════════════════════════════════
-{ id: 'q3', type: 'identify', level: 2, metricIds: ['arppu'],
+{ id: 'q3', type: 'identify', level: 2, metricIds: [],
   prompt: 'Что показывает ARPPU, чего не показывает ARPU?',
   options: [
     { id: 'a', label: 'Среднюю выручку на одного платящего пользователя' },
@@ -39,7 +39,7 @@ export const questions: TestQuestion[] = [
   why: 'ARPPU делит выручку только на платящих, а ARPU — на всех пользователей.',
   whyNot: { b: 'Это определение ARPU.', c: 'Это количество платящих, а не выручка на них.', d: 'Это CAC.' } },
 
-{ id: 'q4', type: 'compare', level: 2, metricIds: ['stickiness', 'retention-rate'],
+{ id: 'q4', type: 'compare', level: 2, metricIds: ['pm-07', 'pm-02'],
   prompt: 'В чём ключевое различие между Stickiness (DAU/MAU) и Retention Rate?',
   options: [
     { id: 'a', label: 'Stickiness про долю месяца, Retention про возврат когорты через N дней' },
@@ -51,7 +51,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'Это разные понятия с разными знаменателями.', c: 'Обе относятся к продукту.', d: 'Между ними нет простого обратного соотношения.' } },
 
 // ═══ LEVEL 3 · IDENTIFICATION ═════════════════════════════════════
-{ id: 'q5', type: 'identify', level: 3, metricIds: ['conversion-rate'],
+{ id: 'q5', type: 'identify', level: 3, metricIds: ['pm-14'],
   prompt: '1000 пользователей начали оформление заказа, 720 успешно оплатили. Какую метрику использовать для доли дошедших до покупки?',
   options: [
     { id: 'a', label: 'Retention Rate' },
@@ -62,7 +62,7 @@ export const questions: TestQuestion[] = [
   why: 'Здесь измеряется переход между двумя этапами воронки — это Conversion Rate (72%).',
   whyNot: { a: 'Retention — возвращение во времени, а не переход между шагами.', c: 'DAU не про переходы в воронке.', d: 'NPS не про конверсию.' } },
 
-{ id: 'q6', type: 'identify', level: 3, metricIds: ['time-to-value'],
+{ id: 'q6', type: 'identify', level: 3, metricIds: ['pm-13'],
   prompt: 'B2B SaaS: новым клиентам нужно в среднем 3 недели, чтобы построить первый отчёт. Какую метрику это характеризует?',
   options: [
     { id: 'a', label: 'Time to Value' },
@@ -74,7 +74,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'Time on Task — время одной задачи, а не до первой ценности.', c: 'SUS — опросник удобства.', d: 'Churn — отток.' } },
 
 // ═══ LEVEL 4 · COMPARISON ═════════════════════════════════════════
-{ id: 'q7', type: 'compare', level: 4, metricIds: ['conversion-rate', 'completion-rate'],
+{ id: 'q7', type: 'compare', level: 4, metricIds: ['pm-14', 'pm-15'],
   prompt: 'Вы анализируете 4-шаговую регистрацию: 1000 начали, на 4-м шаге осталось 200. Что покажет Completion Rate в отличие от Conversion Rate?',
   options: [
     { id: 'a', label: 'Долю дошедших до конца всего процесса' },
@@ -85,7 +85,7 @@ export const questions: TestQuestion[] = [
   why: 'Completion Rate — доля прошедших весь многошаговый путь (20%), а не один переход.',
   whyNot: { b: 'Конверсия последнего шага — это Step Conversion, не Completion.', c: 'Это Time on Task.', d: 'Это Retention.' } },
 
-{ id: 'q8', type: 'compare', level: 4, metricIds: ['cac', 'ltv'],
+{ id: 'q8', type: 'compare', level: 4, metricIds: ['gr-01', 'gr-02'],
   prompt: 'Как правильно интерпретировать пару CAC и LTV?',
   options: [
     { id: 'a', label: 'LTV должен быть осмысленно выше CAC (обычно в 3+ раза)' },
@@ -96,7 +96,7 @@ export const questions: TestQuestion[] = [
   why: 'LTV/CAC > 3 считается здоровой юнит-экономикой.',
   whyNot: { b: 'Высокий CAC при низком LTV означает потерю денег.', c: 'Именно сравнение даёт картину окупаемости.', d: 'Обе про клиента, с разных сторон.' } },
 
-{ id: 'q9', type: 'compare', level: 4, metricIds: ['nps', 'csat'],
+{ id: 'q9', type: 'compare', level: 4, metricIds: ['uxm-09', 'uxm-08'],
   prompt: 'NPS или CSAT выбрать, чтобы понять готовность пользователей рекомендовать продукт?',
   options: [
     { id: 'a', label: 'NPS' },
@@ -108,7 +108,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'CSAT — про конкретный опыт, а не рекомендацию.', c: 'SUS — удобство интерфейса.', d: 'SEQ — лёгкость одной задачи.' } },
 
 // ═══ LEVEL 5 · APPLICATION ════════════════════════════════════════
-{ id: 'q10', type: 'select', level: 5, metricIds: ['conversion-rate', 'drop-off-rate'],
+{ id: 'q10', type: 'select', level: 5, metricIds: ['pm-14', 'pm-16'],
   prompt: 'Выберите набор метрик для анализа потерь в воронке checkout.',
   options: [
     { id: 'a', label: 'Conversion Rate + Drop-off Rate' },
@@ -119,7 +119,7 @@ export const questions: TestQuestion[] = [
   why: 'Conversion Rate и Drop-off Rate напрямую описывают переходы и потери в воронке.',
   whyNot: { b: 'NPS/SUS — восприятие, не потери.', c: 'DAU/MAU — охват, не воронка.', d: 'CAC/LTV — юнит-экономика.' } },
 
-{ id: 'q11', type: 'multi', level: 5, metricIds: ['retention-rate', 'churn-rate', 'cohort-retention'],
+{ id: 'q11', type: 'multi', level: 5, metricIds: ['pm-02', 'pm-03', 'pm-18'],
   prompt: 'Какие метрики помогут оценить, удерживает ли продукт пользователей во времени? (выберите все подходящие)',
   options: [
     { id: 'a', label: 'Retention Rate' },
@@ -131,7 +131,7 @@ export const questions: TestQuestion[] = [
   whyNot: { d: 'CPM — цена показов, к удержанию не относится.' } },
 
 // ═══ LEVEL 6 · INTERPRETATION ═════════════════════════════════════
-{ id: 'q12', type: 'interpret', level: 6, metricIds: ['conversion-rate'],
+{ id: 'q12', type: 'interpret', level: 6, metricIds: ['pm-14'],
   prompt: 'Conversion Rate вырос с 42% до 51%. Что можно заключить?',
   options: [
     { id: 'a', label: 'Доля переходящих к целевому действию выросла; причину нужно искать отдельно' },
@@ -142,7 +142,7 @@ export const questions: TestQuestion[] = [
   why: 'Метрика выросла, но вывод о причине требует анализа — не всегда это улучшение UX.',
   whyNot: { b: 'Одна метрика не доказывает «продукт лучше».', c: 'Рост конверсии может быть из-за трафика или акций.', d: 'Прибыль зависит от цены, маржи и объёмов.' } },
 
-{ id: 'q13', type: 'interpret', level: 6, metricIds: ['ltv-cac'],
+{ id: 'q13', type: 'interpret', level: 6, metricIds: ['gr-03'],
   prompt: 'LTV/CAC = 1,2. Какой вывод корректен?',
   options: [
     { id: 'a', label: 'Юнит-экономика на грани: на каждого клиента почти не остаётся прибыли' },
@@ -154,7 +154,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'Для масштабирования ориентир 3+.', c: 'Низкий ratio — проблема, а не «низкий CAC».', d: 'Метрика информативна, просто сигналит о риске.' } },
 
 // ═══ LEVEL 7 · PRODUCT REASONING ══════════════════════════════════
-{ id: 'q14', type: 'select', level: 7, metricIds: ['activation-rate', 'onboarding-completion', 'time-to-value'],
+{ id: 'q14', type: 'select', level: 7, metricIds: ['pm-01', 'pm-13'],
   prompt: 'Новые пользователи регистрируются, но не возвращаются. Постройте цепочку метрик для диагностики.',
   options: [
     { id: 'a', label: 'Activation Rate → Time to Value → Cohort Retention' },
@@ -165,7 +165,7 @@ export const questions: TestQuestion[] = [
   why: 'Цепочка «активация → время до ценности → удержание» описывает путь новичка.',
   whyNot: { b: 'CPM/CPC/CPA — рекламные цены, не онбординг.', c: 'SUS/NPS/CSAT — восприятие, не возвраты.', d: 'MRR/ARR/ARPU — деньги, не путь новичка.' } },
 
-{ id: 'q15', type: 'mistake', level: 7, metricIds: ['nps'],
+{ id: 'q15', type: 'mistake', level: 7, metricIds: ['uxm-09'],
   prompt: '«Если NPS вырос, значит UX стал лучше». Корректно ли утверждение?',
   options: [
     { id: 'a', label: 'Некорректно: NPS измеряет лояльность, а не UX' },
@@ -176,7 +176,7 @@ export const questions: TestQuestion[] = [
   why: 'NPS — про лояльность и рекомендации; рост NPS не доказывает улучшение UX.',
   whyNot: { b: 'Высокий NPS возможен при плохом удобстве.', c: 'Величина NPS не меняет природу метрики.', d: 'NPS про пользователей, но не про UX.' } },
 
-{ id: 'q16', type: 'mistake', level: 7, metricIds: ['time-on-task'],
+{ id: 'q16', type: 'mistake', level: 7, metricIds: ['uxm-02'],
   prompt: '«Чем меньше Time on Task, тем лучше». Где ошибка в этом утверждении?',
   options: [
     { id: 'a', label: 'Для творческих задач меньшее время не всегда лучше' },
@@ -188,7 +188,7 @@ export const questions: TestQuestion[] = [
   whyNot: { b: 'Время измеряют в usability-тестах.', c: 'Контекст задачи решает.', d: 'Утверждение слишком категорично.' } },
 
 // ═══ LEVEL 3–6 · MORE QUESTIONS ═══════════════════════════════════
-{ id: 'q17', type: 'calc', level: 3, metricIds: ['conversion-rate'],
+{ id: 'q17', type: 'calc', level: 3, metricIds: ['pm-14'],
   prompt: '200 пользователей начали действие, 130 завершили. Рассчитайте Conversion Rate.',
   options: [
     { id: 'a', label: '65%' },
@@ -199,7 +199,7 @@ export const questions: TestQuestion[] = [
   why: 'CR = 130 ÷ 200 = 65%.',
   whyNot: { b: '35% — это Drop-off (100% − 65%).', c: 'Нельзя получить более 100% в этой задаче.', d: 'Некорректный расчёт.' } },
 
-{ id: 'q18', type: 'calc', level: 4, metricIds: ['arpu'],
+{ id: 'q18', type: 'calc', level: 4, metricIds: ['gr-07'],
   prompt: 'Выручка 40 000$, всего 20 000 пользователей, из них 4 000 платящих. Рассчитайте ARPU.',
   options: [
     { id: 'a', label: '2$' },
@@ -210,7 +210,7 @@ export const questions: TestQuestion[] = [
   why: 'ARPU = 40 000 ÷ 20 000 = 2$ (делим на всю базу).',
   whyNot: { b: '10$ — это ARPPU (40 000 ÷ 4 000).', c: 'Некорректный расчёт.', d: 'Это доля платящих, а не выручка.' } },
 
-{ id: 'q19', type: 'calc', level: 5, metricIds: ['stickiness'],
+{ id: 'q19', type: 'calc', level: 5, metricIds: ['pm-07'],
   prompt: 'DAU = 30 000, MAU = 100 000. Рассчитайте Stickiness (DAU/MAU).',
   options: [
     { id: 'a', label: '30%' },
@@ -221,7 +221,7 @@ export const questions: TestQuestion[] = [
   why: 'Stickiness = 30 000 ÷ 100 000 = 30%.',
   whyNot: { b: 'Некорректный порядок.', c: '70% — обратное значение.', d: 'Округление неверное.' } },
 
-{ id: 'q20', type: 'compare', level: 4, metricIds: ['retention-rate', 'churn-rate'],
+{ id: 'q20', type: 'compare', level: 4, metricIds: ['pm-02', 'pm-03'],
   prompt: 'Monthly Retention 85%. Какой Churn Rate за месяц?',
   options: [
     { id: 'a', label: '15%' },
@@ -232,7 +232,7 @@ export const questions: TestQuestion[] = [
   why: 'Если без учёта новых пользователей, Churn = 100% − Retention = 15%.',
   whyNot: { b: 'Это Retention, а не Churn.', c: 'Некорректный расчёт.', d: 'При чистой паре метрик вычисление прямое.' } },
 
-{ id: 'q21', type: 'identify', level: 3, metricIds: ['cart-abandonment'],
+{ id: 'q21', type: 'identify', level: 3, metricIds: [],
   prompt: '1000 корзин создано, оплачено 300. Как называется метрика потерь на этом этапе?',
   options: [
     { id: 'a', label: 'Cart Abandonment Rate' },
@@ -243,7 +243,7 @@ export const questions: TestQuestion[] = [
   why: 'Потери между корзиной и покупкой — Cart Abandonment Rate (70%).',
   whyNot: { b: 'Retention — возврат во времени.', c: 'SUS — опросник.', d: 'K-Factor — виральность.' } },
 
-{ id: 'q22', type: 'select', level: 7, metricIds: ['cac', 'ltv-cac', 'churn-rate'],
+{ id: 'q22', type: 'select', level: 7, metricIds: ['gr-01', 'gr-03', 'pm-03'],
   prompt: 'Бизнес тратит больше на привлечение, чем приносит каждый клиент. Какие метрики нужны для диагностики?',
   options: [
     { id: 'a', label: 'CAC + LTV/CAC + Churn Rate' },
@@ -254,7 +254,7 @@ export const questions: TestQuestion[] = [
   why: 'Юнит-экономика и отток напрямую объясняют убыточность привлечения.',
   whyNot: { b: 'UX-опросники не объяснят деньги.', c: 'DAU/WAU — охват, не экономика.', d: 'CTR/CPM — реклама, не окупаемость.' } },
 
-{ id: 'q23', type: 'interpret', level: 6, metricIds: ['churn-rate'],
+{ id: 'q23', type: 'interpret', level: 6, metricIds: ['pm-03'],
   prompt: 'Churn 25% в месяц. Что это означает для средней продолжительности жизни клиента?',
   options: [
     { id: 'a', label: 'В среднем клиент живёт около 4 месяцев' },
@@ -265,7 +265,7 @@ export const questions: TestQuestion[] = [
   why: 'Средний срок жизни ≈ 100% ÷ Churn = 4 месяца.',
   whyNot: { b: 'Это обратный расчёт.', c: 'Метрика информативна.', d: 'Среднее значение ≠ «все уйдут».' } },
 
-{ id: 'q24', type: 'compare', level: 4, metricIds: ['nps', 'sus'],
+{ id: 'q24', type: 'compare', level: 4, metricIds: ['uxm-09', 'uxm-05'],
   prompt: 'Satisfaction (CSAT) vs SUS — что измеряет каждый?',
   options: [
     { id: 'a', label: 'CSAT — удовлетворённость опытом, SUS — воспринимаемое удобство интерфейса' },
@@ -276,7 +276,7 @@ export const questions: TestQuestion[] = [
   why: 'CSAT относится к удовлетворённости, SUS — стандартизированный опросник юзабилити.',
   whyNot: { b: 'Лояльность — NPS.', c: 'Конверсия — CR.', d: 'Обе про пользовательский опыт.' } },
 
-{ id: 'q25', type: 'mistake', level: 6, metricIds: ['conversion-rate'],
+{ id: 'q25', type: 'mistake', level: 6, metricIds: ['pm-14'],
   prompt: '«Если Conversion Rate вырос, значит UX стал лучше». Верно ли это?',
   options: [
     { id: 'a', label: 'Необязательно: могли повлиять трафик, сезонность, акции' },
@@ -287,7 +287,7 @@ export const questions: TestQuestion[] = [
   why: 'Рост конверсии — сигнал, но причина может быть внешней.',
   whyNot: { b: 'Слишком прямолинейный вывод.', c: 'Причина не зависит от платформы.', d: 'Конверсия — про пользователей, просто не единственный фактор.' } },
 
-{ id: 'q26', type: 'identify', level: 3, metricIds: ['task-success'],
+{ id: 'q26', type: 'identify', level: 3, metricIds: ['uxm-01'],
   prompt: 'В usability-тесте 7 из 10 пользователей успешно завершили задачу. Какая метрика?',
   options: [
     { id: 'a', label: 'Task Success Rate' },
@@ -298,7 +298,7 @@ export const questions: TestQuestion[] = [
   why: 'Доля успешно выполнивших тестовую задачу — Task Success Rate (70%).',
   whyNot: { b: 'NPS — лояльность.', c: 'MRR — выручка.', d: 'CPM — реклама.' } },
 
-{ id: 'q27', type: 'multi', level: 5, metricIds: ['dau', 'mau', 'sessions-per-user'],
+{ id: 'q27', type: 'multi', level: 5, metricIds: ['pm-04', 'pm-06', 'pm-11'],
   prompt: 'Какие метрики описывают вовлечённость (engagement)? (выберите все)',
   options: [
     { id: 'a', label: 'DAU' },
@@ -309,7 +309,7 @@ export const questions: TestQuestion[] = [
   why: 'Охват, частота и «липкость» описывают вовлечённость.',
   whyNot: { d: 'CAC — стоимость привлечения.' } },
 
-{ id: 'q28', type: 'identify', level: 3, metricIds: ['viral-coefficient'],
+{ id: 'q28', type: 'identify', level: 3, metricIds: [],
   prompt: 'Каждый пользователь приглашает 0,5 человека, половина приглашённых принимают инвайт. Какая метрика описывает этот рост?',
   options: [
     { id: 'a', label: 'K-Factor (Viral Coefficient)' },
@@ -320,7 +320,7 @@ export const questions: TestQuestion[] = [
   why: 'K-Factor = приглашения × конверсия приглашений = 0,25.',
   whyNot: { b: 'Churn — отток.', c: 'SUS — удобство.', d: 'ARPU — выручка на пользователя.' } },
 
-{ id: 'q29', type: 'interpret', level: 6, metricIds: ['nps'],
+{ id: 'q29', type: 'interpret', level: 6, metricIds: ['uxm-09'],
   prompt: 'NPS вырос с +10 до +35. Что можно сказать наверняка?',
   options: [
     { id: 'a', label: 'Лояльность и баланс промоутеров/детракторов изменились в положительную сторону' },
@@ -331,7 +331,7 @@ export const questions: TestQuestion[] = [
   why: 'NPS вырос — лояльность улучшилась; причину и UX нужно проверять отдельно.',
   whyNot: { b: 'NPS не доказывает улучшение UX.', c: 'NPS не связан с выручкой напрямую.', d: 'Значение +35 ≠ все промоутеры.' } },
 
-{ id: 'q30', type: 'select', level: 7, metricIds: ['sus', 'task-success', 'time-on-task', 'error-rate'],
+{ id: 'q30', type: 'select', level: 7, metricIds: ['uxm-05', 'uxm-01', 'uxm-02', 'uxm-03'],
   prompt: 'После редизайна нужно оценить удобство интерфейса. Какой набор метрик выбрать?',
   options: [
     { id: 'a', label: 'SUS + Task Success + Time on Task + Error Rate' },
@@ -342,7 +342,7 @@ export const questions: TestQuestion[] = [
   why: 'SUS даёт общую оценку, объективные метрики — выполнимость, время и ошибки.',
   whyNot: { b: 'MRR/ARR — деньги.', c: 'CPC/CPM — реклама.', d: 'DAU/MAU — охват, не удобство.' } },
 
-{ id: 'q31', type: 'compare', level: 4, metricIds: ['retention-rate', 'engagement'],
+{ id: 'q31', type: 'compare', level: 4, metricIds: ['pm-02'],
   prompt: 'Retention vs Engagement — в чём главное различие?',
   options: [
     { id: 'a', label: 'Retention про возврат во времени, Engagement про активность и использование' },
@@ -353,7 +353,7 @@ export const questions: TestQuestion[] = [
   why: 'Удержание отвечает «возвращаются ли», вовлечённость — «как активно используют».',
   whyNot: { b: 'Разные вопросы.', c: 'Обе про поведение.', d: 'Обе про продукт.' } },
 
-{ id: 'q32', type: 'mistake', level: 7, metricIds: ['ltv'],
+{ id: 'q32', type: 'mistake', level: 7, metricIds: ['gr-02'],
   prompt: '«LTV 50$ — значит каждый клиент приносит 50$ прибыли». Найдите ошибку.',
   options: [
     { id: 'a', label: 'LTV — прогноз и обычно считается от выручки/маржи с допущениями' },
@@ -364,7 +364,7 @@ export const questions: TestQuestion[] = [
   why: 'LTV — оценка на основе допущений (churn, маржа), а не гарантированная прибыль.',
   whyNot: { b: 'Утверждение слишком категорично.', c: 'LTV сильно варьируется.', d: 'LTV как раз про деньги.' } },
 
-{ id: 'q33', type: 'calc', level: 5, metricIds: ['cac-payback'],
+{ id: 'q33', type: 'calc', level: 5, metricIds: ['gr-04'],
   prompt: 'CAC = 120$, чистая маржа с клиента = 40$/мес. За сколько месяцев окупится клиент?',
   options: [
     { id: 'a', label: '3 месяца' },
@@ -375,7 +375,7 @@ export const questions: TestQuestion[] = [
   why: 'Payback = 120 ÷ 40 = 3 месяца.',
   whyNot: { b: 'Некорректный расчёт.', c: 'Некорректный расчёт.', d: 'Некорректный расчёт.' } },
 
-{ id: 'q34', type: 'identify', level: 3, metricIds: ['nps'],
+{ id: 'q34', type: 'identify', level: 3, metricIds: ['uxm-09'],
   prompt: '50% промоутеров, 30% пассивных, 20% детракторов. Рассчитайте NPS.',
   options: [
     { id: 'a', label: 'NPS = +30' },
@@ -386,7 +386,7 @@ export const questions: TestQuestion[] = [
   why: 'NPS = промоутеры − детракторы = 50 − 20 = +30.',
   whyNot: { b: 'Некорректный расчёт.', c: 'Пассивные не учитываются в разнице.', d: 'Некорректный расчёт.' } },
 
-{ id: 'q35', type: 'multi', level: 5, metricIds: ['sus', 'csat', 'nps', 'seq'],
+{ id: 'q35', type: 'multi', level: 5, metricIds: ['uxm-05', 'uxm-08', 'uxm-09', 'uxm-06'],
   prompt: 'Какие метрики относятся к субъективному (воспринимаемому) опыту? (выберите все)',
   options: [
     { id: 'a', label: 'SUS' },
@@ -397,7 +397,7 @@ export const questions: TestQuestion[] = [
   why: 'SUS, CSAT и NPS основаны на восприятии пользователя.',
   whyNot: { d: 'Time on Task — объективное замеренное время.' } },
 
-{ id: 'q36', type: 'select', level: 7, metricIds: ['dau', 'wau', 'mau', 'stickiness'],
+{ id: 'q36', type: 'select', level: 7, metricIds: ['pm-04', 'pm-05', 'pm-06', 'pm-07'],
   prompt: 'Продукт хотят сделать «ежедневной привычкой». Какие метрики отслеживать?',
   options: [
     { id: 'a', label: 'DAU + WAU + MAU + Stickiness' },
@@ -408,7 +408,7 @@ export const questions: TestQuestion[] = [
   why: 'Охват и «липкость» показывают формирование привычки.',
   whyNot: { b: 'Деньги не покажут привычку.', c: 'Рекламные цены не относятся.', d: 'Юнит-экономика не про частоту.' } },
 
-{ id: 'q37', type: 'compare', level: 4, metricIds: ['mrr', 'arr', 'revenue'],
+{ id: 'q37', type: 'compare', level: 4, metricIds: ['gr-05', 'gr-06'],
   prompt: 'Чем MRR отличается от общей выручки?',
   options: [
     { id: 'a', label: 'MRR учитывает только повторяющиеся подписки, выручка — всё' },
@@ -419,7 +419,7 @@ export const questions: TestQuestion[] = [
   why: 'MRR — нормализованный повторяющийся доход; выручка включает и разовые платежи.',
   whyNot: { b: 'Разный состав.', c: 'Не всегда.', d: 'Это определение ARR.' } },
 
-{ id: 'q38', type: 'mistake', level: 7, metricIds: ['dau'],
+{ id: 'q38', type: 'mistake', level: 7, metricIds: ['pm-04'],
   prompt: '«DAU вырос на 20% — значит продукт стал вовлекать лучше». Где ошибка?',
   options: [
     { id: 'a', label: 'DAU может вырасти за счёт маркетинга, без роста вовлечённости' },
@@ -430,7 +430,7 @@ export const questions: TestQuestion[] = [
   why: 'DAU — охват; для вовлечённости нужны частота, длительность, stickiness.',
   whyNot: { b: 'Вывод слишком прямолинейный.', c: 'DAU — уникальные пользователи.', d: 'DAU не про деньги.' } },
 
-{ id: 'q39', type: 'interpret', level: 6, metricIds: ['task-success'],
+{ id: 'q39', type: 'interpret', level: 6, metricIds: ['uxm-01'],
   prompt: 'Task Success Rate = 62% в тесте задачи «восстановить пароль». Что следует предпринять?',
   options: [
     { id: 'a', label: 'Переработать сценарий: метрика ниже порога успешности' },
@@ -441,7 +441,7 @@ export const questions: TestQuestion[] = [
   why: 'Значение ниже типичного порога 78% — задача требует доработки.',
   whyNot: { b: '62% — низкий результат.', c: 'Цены не связаны с успешностью задачи.', d: 'NPS не заменит доработку.' } },
 
-{ id: 'q40', type: 'identify', level: 3, metricIds: ['nrr'],
+{ id: 'q40', type: 'identify', level: 3, metricIds: [],
   prompt: 'Выручка от существующих клиентов выросла на 20% за год без новых продаж. Какая метрика это отражает?',
   options: [
     { id: 'a', label: 'Net Revenue Retention (NRR)' },
@@ -452,7 +452,7 @@ export const questions: TestQuestion[] = [
   why: 'NRR > 100% показывает рост на существующей базе.',
   whyNot: { b: 'CPA — цена действия.', c: 'CPM — цена показов.', d: 'Error Rate — ошибки.' } },
 
-{ id: 'q41', type: 'calc', level: 6, metricIds: ['nrr'],
+{ id: 'q41', type: 'calc', level: 6, metricIds: [],
   prompt: 'MRR на старте 100k$, через квартал 110k$ от тех же клиентов. Рассчитайте NRR.',
   options: [
     { id: 'a', label: '110%' },
@@ -463,7 +463,7 @@ export const questions: TestQuestion[] = [
   why: 'NRR = 110 ÷ 100 × 100% = 110%.',
   whyNot: { b: 'Это прирост, а не коэффициент.', c: 'Некорректный расчёт.', d: 'Некорректная размерность.' } },
 
-{ id: 'q42', type: 'select', level: 7, metricIds: ['sample-size', 'statistical-significance', 'p-value', 'lift'],
+{ id: 'q42', type: 'select', level: 7, metricIds: ['ex-07', 'ex-04'],
   prompt: 'Продуктовая команда хочет корректно провести A/B-тест. Что нужно контролировать?',
   options: [
     { id: 'a', label: 'Sample Size + Statistical Significance + p-value + Lift' },
@@ -474,7 +474,7 @@ export const questions: TestQuestion[] = [
   why: 'Планирование выборки и статистическая интерпретация — основа валидного теста.',
   whyNot: { b: 'UX-опросники не про валидность теста.', c: 'Монетизация не про эксперимент.', d: 'Охват не про тест.' } },
 
-{ id: 'q43', type: 'compare', level: 4, metricIds: ['csat', 'ces'],
+{ id: 'q43', type: 'compare', level: 4, metricIds: ['uxm-08', 'uxm-10'],
   prompt: 'CSAT vs CES — какая метрика сильнее предсказывает повторные покупки?',
   options: [
     { id: 'a', label: 'CES: усилие клиента сильнее связано с лояльностью, чем удовлетворённость' },
@@ -485,7 +485,7 @@ export const questions: TestQuestion[] = [
   why: 'Исследования показывают, что усилие (effort) сильнее влияет на повторные покупки.',
   whyNot: { b: 'Удовлетворённость слабее предсказывает лояльность.', c: 'Связаны напрямую.', d: 'Сила влияния разная.' } },
 
-{ id: 'q44', type: 'mistake', level: 7, metricIds: ['retention-rate'],
+{ id: 'q44', type: 'mistake', level: 7, metricIds: ['pm-02'],
   prompt: '«Высокий Retention всегда означает хороший UX». Верно?',
   options: [
     { id: 'a', label: 'Нет: удержание может держаться на привычке, контрактах или отсутствии альтернатив' },
@@ -496,7 +496,7 @@ export const questions: TestQuestion[] = [
   why: 'Высокое удержание бывает по причинам, не связанным с UX.',
   whyNot: { b: 'Слишком категорично.', c: 'Платформа не меняет логику.', d: 'Retention — про пользователей.' } },
 
-{ id: 'q45', type: 'identify', level: 3, metricIds: ['ctr'],
+{ id: 'q45', type: 'identify', level: 3, metricIds: ['gr-16'],
   prompt: 'Баннер показали 10 000 раз, по нему кликнули 400. Какая метрика?',
   options: [
     { id: 'a', label: 'CTR' },
@@ -507,7 +507,7 @@ export const questions: TestQuestion[] = [
   why: 'Доля кликов от показов — Click-Through Rate (4%).',
   whyNot: { b: 'NPS — лояльность.', c: 'SUS — удобство.', d: 'Churn — отток.' } },
 
-{ id: 'q46', type: 'calc', level: 5, metricIds: ['ltv'],
+{ id: 'q46', type: 'calc', level: 5, metricIds: ['gr-02'],
   prompt: 'ARPU = 20$, churn = 10%/мес. Оцените LTV (без учёта маржи).',
   options: [
     { id: 'a', label: '≈ 200$' },
@@ -518,7 +518,7 @@ export const questions: TestQuestion[] = [
   why: 'LTV ≈ ARPU ÷ churn = 20 ÷ 0,1 = 200$.',
   whyNot: { b: 'Это ARPU.', c: 'Некорректный расчёт.', d: 'Некорректный расчёт.' } },
 
-{ id: 'q47', type: 'compare', level: 4, metricIds: ['cac', 'cpa'],
+{ id: 'q47', type: 'compare', level: 4, metricIds: ['gr-01'],
   prompt: 'В чём разница между CAC и CPA?',
   options: [
     { id: 'a', label: 'CAC — стоимость платящего клиента, CPA — стоимость любого целевого действия' },
@@ -529,7 +529,7 @@ export const questions: TestQuestion[] = [
   why: 'CPA охватывает любые целевые действия (установки, заявки), CAC — только платящих клиентов.',
   whyNot: { b: 'Разные знаменатели.', c: 'Не всегда.', d: 'CAC не про клики.' } },
 
-{ id: 'q48', type: 'select', level: 7, metricIds: ['error-rate', 'time-on-task', 'task-success', 'number-of-steps'],
+{ id: 'q48', type: 'select', level: 7, metricIds: ['uxm-03', 'uxm-02', 'uxm-01', 'uxm-04'],
   prompt: 'Форма из 9 полей даёт много ошибок и долгое заполнение. Какие метрики диагностируют проблему?',
   options: [
     { id: 'a', label: 'Error Rate + Time on Task + Task Success + Number of Steps' },
@@ -540,7 +540,7 @@ export const questions: TestQuestion[] = [
   why: 'Ошибки, время, успешность и число шагов напрямую описывают проблему формы.',
   whyNot: { b: 'Деньги не диагностируют форму.', c: 'Реклама не относится.', d: 'Виральность не про форму.' } },
 
-{ id: 'q49', type: 'interpret', level: 6, metricIds: ['mau'],
+{ id: 'q49', type: 'interpret', level: 6, metricIds: ['pm-06'],
   prompt: 'MAU вырос на 30%, но Stickiness упал с 25% до 18%. Что происходит?',
   options: [
     { id: 'a', label: 'Аудитория выросла за счёт редких посетителей; вовлечённость снизилась' },
@@ -551,7 +551,7 @@ export const questions: TestQuestion[] = [
   why: 'Рост MAU при падении stickiness — база раздувается «непривычными» пользователями.',
   whyNot: { b: 'Stickiness упал — тревожный сигнал.', c: 'Вирусность не доказана.', d: 'Динамика противоречивая, есть о чём думать.' } },
 
-{ id: 'q50', type: 'identify', level: 3, metricIds: ['ces'],
+{ id: 'q50', type: 'identify', level: 3, metricIds: ['uxm-10'],
   prompt: 'Пользователи жалуются, что решить проблему в поддержке сложно и долго. Какая метрика точнее всего это измерит?',
   options: [
     { id: 'a', label: 'CES (Customer Effort Score)' },
