@@ -5,3 +5,7 @@ dist
 node_modules/.tmp
 *.tsbuildinfo
 ideology/
+visuals/
+PRODUCT.md
+DESIGN.md
+.nojekyll
