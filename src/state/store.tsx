@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import type { AppState, MetricProgress } from '../types';
+import type { AppState, MetricProgress, TestSessionResult } from '../types';
 import { cards } from '../data/cards';
 import { blankProgress, recordAnswer, markSeen, markHard } from './spacedRepetition';
 
@@ -9,12 +9,13 @@ type Action =
   | { type: 'answer'; metricId: string; correct: boolean; confusedMetricId?: string }
   | { type: 'seen'; metricId: string }
   | { type: 'hard'; metricId: string }
+  | { type: 'completeTest'; result: TestSessionResult }
   | { type: 'reset' };
 
 function freshState(): AppState {
   const progress: Record<string, MetricProgress> = {};
   for (const c of cards) progress[c.id] = blankProgress(c.id);
-  return { progress, answered: 0, correct: 0, streak: 0, bestStreak: 0, lastAnswerCorrect: null };
+  return { progress, answered: 0, correct: 0, streak: 0, bestStreak: 0, lastAnswerCorrect: null, testHistory: [] };
 }
 
 function loadState(): AppState {
@@ -57,6 +58,8 @@ function reducer(state: AppState, action: Action): AppState {
       const prev = state.progress[action.metricId] ?? blankProgress(action.metricId);
       return { ...state, progress: { ...state.progress, [action.metricId]: markHard(prev) } };
     }
+    case 'completeTest':
+      return { ...state, testHistory: [action.result, ...(state.testHistory ?? [])].slice(0, 24) };
     case 'reset':
       return freshState();
     default:
@@ -69,6 +72,7 @@ interface StoreCtx {
   answer: (metricId: string, correct: boolean, confusedMetricId?: string) => void;
   seen: (metricId: string) => void;
   hard: (metricId: string) => void;
+  completeTest: (result: TestSessionResult) => void;
   reset: () => void;
 }
 
@@ -86,6 +90,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     answer: (metricId, correct, confusedMetricId) => dispatch({ type: 'answer', metricId, correct, confusedMetricId }),
     seen: (metricId) => dispatch({ type: 'seen', metricId }),
     hard: (metricId) => dispatch({ type: 'hard', metricId }),
+    completeTest: (result) => dispatch({ type: 'completeTest', result }),
     reset: () => dispatch({ type: 'reset' }),
   }), [state]);
 

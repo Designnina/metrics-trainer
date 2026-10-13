@@ -1,5 +1,9 @@
 import type { TestQuestion } from '../types';
 
+/** @deprecated EN is the source of truth. Test sessions are generated from
+ *  src/data/cards.ts via src/data/testGenerator.ts. This legacy RU bank is
+ *  unimported dead code — kept for reference during RU card transcreation
+ *  (phase C), then to be removed. Do not wire it into the UI. */
 export const questions: TestQuestion[] = [
 
 // ═══ LEVEL 1 · RECOGNITION ════════════════════════════════════════

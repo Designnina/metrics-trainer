@@ -2,16 +2,13 @@
 @import "@fontsource/onest/500.css";
 @import "@fontsource/onest/600.css";
 @import "@fontsource/onest/700.css";
-@import "@fontsource/unbounded/500.css";
-@import "@fontsource/unbounded/600.css";
-@import "@fontsource/unbounded/700.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
 :root {
-  /* Onest carries the interface and Cyrillic display type. Unbounded is kept only as a small accent face. */
+  /* One characterful grotesk carries the whole interface; hierarchy comes from scale and rhythm. */
   --font-display: "Onest", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --font-accent: "Unbounded", system-ui, sans-serif;
+  --font-accent: "Onest", "Helvetica Neue", Arial, system-ui, sans-serif;
   --font-sans: "Onest", "Helvetica Neue", Arial, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -49,12 +46,17 @@
   --sp-9: 96px;
   --sp-10: 128px;
 
-  /* Shape — fewer boxes, thinner rules; card radius reduced, editorial */
-  --r-xs: 4px;
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 14px;
-  --r-xl: 20px;
+  /* Semantic radius hierarchy: controls → small cards → panels → primary surfaces. */
+  --radius-control: 12px;
+  --radius-small: 16px;
+  --radius-medium: 22px;
+  --radius-large: 32px;
+  --r-xs: var(--radius-control);
+  --r-sm: var(--radius-control);
+  --r-md: var(--radius-small);
+  --r-lg: var(--radius-medium);
+  --r-xl: var(--radius-large);
+  --r-xxl: var(--radius-large);
   --r-pill: 999px;
 
   /* Motion */
@@ -65,56 +67,85 @@
   --dur-card: 420ms;
 
   /* Layout — one coherent grid */
-  --rail-w: 144px;
-  --tabbar-h: 60px;
+  --rail-w: 216px;
+  --frame-gap: 10px;
+  --tabbar-h: 68px;
   --gutter: 20px;
   --gutter-lg: clamp(32px, 5vw, 64px);
-  --content-w: 1120px;
-  --card-w: min(100%, 760px);
-  --content-narrow: 760px;
+  --content-w: 1320px;
+  --card-w: min(100%, 880px);
+  --content-narrow: 880px;
 }
 
 /* LIGHT — cold off-white, mono + single cobalt signal (same both themes) */
 :root, [data-theme="light"] {
   color-scheme: light;
-  --bg: #F2F3F2;
-  --bg-2: #E9EAE9;
-  --surface: #FFFFFF;
-  --surface-2: #F7F8F7;
-  --ink: #141414;
-  --ink-2: #6E6E6E;
-  --ink-3: #9B9B9B;
+  --bg: #DEDFDD;
+  --bg-2: #EEEDEB;
+  --surface: #FBFBFA;
+  --surface-2: #F0F0EE;
+  --surface-hover: #E9E9E7;
+  --ink: #171817;
+  --ink-2: #555754;
+  --ink-3: #686A67;
   --rule: rgba(20, 20, 20, 0.10);
   --rule-strong: rgba(20, 20, 20, 0.22);
   /* cobalt — contrast 5.28 on white, 3.17 on dark surface (passes 3:1 + 4.5:1) */
-  --accent: #3358FF;
+  --accent: #3158F5;
+  --accent-hover: #244BDD;
+  --accent-text: #3158F5;
+  --focus: #3158F5;
   --accent-ink: #FFFFFF;
   --accent-soft: #EEF0FF;
   --bad: oklch(55% 0.14 25);
-  --shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 10px 28px -20px rgba(20, 20, 20, 0.10);
+  --shadow: 0 30px 80px -58px rgba(20, 20, 20, 0.34);
+  --study-card: #3158F5;
+  --study-card-ink: #FFFFFF;
+  --study-card-muted: rgba(255, 255, 255, 0.92);
+  --study-card-label: rgba(255, 255, 255, 0.88);
+  --study-card-secondary-label: rgba(255, 255, 255, 0.50);
+  --study-card-rule: rgba(255, 255, 255, 0.20);
+  --study-card-soft: rgba(255, 255, 255, 0.12);
+  --action-strong: #171817;
+  --action-strong-hover: #2B2C2B;
+  --action-strong-ink: #FFFFFF;
 }
 
 /* DARK — near-black, same cobalt signal (hue-locked, not separate palette) */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #151616;
-  --bg-2: #0F1010;
-  --surface: #1D1E1E;
-  --surface-2: #242525;
+  --bg: #0F1010;
+  --bg-2: #171818;
+  --surface: #202121;
+  --surface-2: #292A2A;
+  --surface-hover: #303131;
   --ink: #EBECEC;
-  --ink-2: #8A8B8B;
-  --ink-3: #5E5F5F;
+  --ink-2: #B8BAB7;
+  --ink-3: #A3A5A2;
   --rule: rgba(235, 236, 236, 0.10);
   --rule-strong: rgba(235, 236, 236, 0.22);
-  --accent: #3358FF;
+  --accent: #3158F5;
+  --accent-hover: #244BDD;
+  --accent-text: #91A1FF;
+  --focus: #A9B5FF;
   --accent-ink: #FFFFFF;
   --accent-soft: rgba(51, 88, 255, 0.14);
   --bad: oklch(66% 0.13 25);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 36px -24px rgba(0, 0, 0, 0.55);
+  --shadow: 0 34px 90px -56px rgba(0, 0, 0, 0.88);
+  --study-card: #3158F5;
+  --study-card-ink: #FFFFFF;
+  --study-card-muted: rgba(255, 255, 255, 0.92);
+  --study-card-label: rgba(255, 255, 255, 0.88);
+  --study-card-secondary-label: rgba(255, 255, 255, 0.50);
+  --study-card-rule: rgba(255, 255, 255, 0.20);
+  --study-card-soft: rgba(255, 255, 255, 0.12);
+  --action-strong: #101111;
+  --action-strong-hover: #252626;
+  --action-strong-ink: #FFFFFF;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -126,8 +157,9 @@ body {
   transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
 }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+button:disabled { cursor: default; }
 a { color: inherit; text-decoration: none; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
 ::selection { background: var(--accent); color: var(--accent-ink); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 

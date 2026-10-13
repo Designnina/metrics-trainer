@@ -1,13 +1,16 @@
 import { Link, useParams } from 'react-router-dom';
 import { cardById } from '../data/cards';
-import { domainById } from '../data/taxonomy';
+import { localizeCard } from '../i18n/cardOverrides';
+import { useLanguage } from '../state/language';
 
 export function MetricDetail() {
   const { id } = useParams();
-  const card = id ? cardById[id] : undefined;
-  if (!card) return <div className="empty">Карточка не найдена.</div>;
+  const { t, lang, domainTitle } = useLanguage();
+  const raw = id ? cardById[id] : undefined;
+  const card = raw ? localizeCard(raw, lang) : undefined;
+  if (!card) return <div className="empty">{t('detail.notFound')}</div>;
 
-  const dom = domainById[card.category];
+  const dom = domainTitle(card.category);
 
   const Section = ({ label, children }: { label: string; children: React.ReactNode }) => (
     <section>
@@ -17,30 +20,27 @@ export function MetricDetail() {
   );
 
   return (
-    <div className="screen">
-      <Link to="/library" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 40, fontFamily: 'var(--font-sans)', fontSize: 'var(--t-14)', color: 'var(--ink-2)' }}>
-        ← Библиотека
-      </Link>
+    <div className="screen metric-detail-screen">
+      <article className="metric-detail-workspace">
+        <Link to="/library" className="metric-detail-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 12H5m5 5-5-5 5-5" /></svg>
+          {t('detail.back')}
+        </Link>
 
-      <div className="tech" style={{ marginBottom: 14 }}>{dom?.title ?? card.category} · {card.level} · {card.mode}</div>
-      <h1 className="screen-title" style={{ fontSize: 'clamp(2rem, 6vw, 3.25rem)' }}>{card.answer}</h1>
-      <p className="body" style={{ fontSize: 'var(--t-20)', fontWeight: 600, color: 'var(--ink)', marginTop: 18, maxWidth: '30ch', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
-        {card.frontQuestion}
-      </p>
-      {card.frontScenario && (
-        <p className="body" style={{ marginTop: 14, maxWidth: '60ch' }}>{card.frontScenario}</p>
-      )}
+        <div className="metric-detail-meta">
+          <span className="metric-detail-domain">{dom}</span>
+          <span className="metric-detail-service">{t(`level.${card.level}` as string)}</span>
+          <span className="metric-detail-service">{t(`mode.${card.mode}` as string)}</span>
+        </div>
+        <h1>{card.answer}</h1>
+        <p className="metric-detail-question" lang={lang}>{card.frontQuestion}</p>
+        {card.frontScenario && <p className="metric-detail-scenario" lang={lang}>{card.frontScenario}</p>}
 
-      <div className="stack" style={{ marginTop: 48, gap: 40 }}>
-        <Section label="Суть">
-          <div className="body" style={{ fontSize: 'var(--t-18)', color: 'var(--ink)', fontWeight: 500 }}>{card.backInfo}</div>
-        </Section>
-        {card.formula && (
-          <Section label="Формула">
-            <div className="fb-formula">{card.formula}</div>
-          </Section>
-        )}
-      </div>
+        <div className="metric-detail-sections">
+          <Section label={t('detail.brief')}><p lang={lang}>{card.backInfo}</p></Section>
+          {card.formula && <Section label={t('card.formula')}><div className="metric-detail-formula">{card.formula}</div></Section>}
+        </div>
+      </article>
     </div>
   );
 }

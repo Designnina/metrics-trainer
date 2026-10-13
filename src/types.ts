@@ -38,7 +38,7 @@ export interface Metric {
   name: string;
   family: FamilyId;
   categoryId: string;
-  tagline: string; // вопрос на который отвечает
+  tagline: string; // question the metric answers
   definition: string;
   measures: string;
   formula?: string;
@@ -84,6 +84,26 @@ export interface MetricProgress {
   dueAt: number;
 }
 
+export interface TestTopicResult {
+  group: CardGroup;
+  correct: number;
+  total: number;
+  points: number;
+  maxPoints: number;
+}
+
+export interface TestSessionResult {
+  id: string;
+  completedAt: number;
+  mode: 'balanced' | 'weak' | 'challenge';
+  correct: number;
+  total: number;
+  points: number;
+  maxPoints: number;
+  accuracy: number;
+  topics: TestTopicResult[];
+}
+
 export interface AppState {
   progress: Record<string, MetricProgress>;
   answered: number;
@@ -91,4 +111,5 @@ export interface AppState {
   streak: number;
   bestStreak: number;
   lastAnswerCorrect: boolean | null;
+  testHistory: TestSessionResult[];
 }

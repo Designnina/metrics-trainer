@@ -1,4 +1,5 @@
 import type { TestQuestion } from '../types';
+import { useLanguage } from '../state/language';
 
 export function OptionList({ q, selected, revealed, onSelect }: {
   q: TestQuestion;
@@ -25,14 +26,15 @@ export function OptionList({ q, selected, revealed, onSelect }: {
     }
     return cls;
   };
+  const { t } = useLanguage();
   return (
-    <div role="group" aria-label="Варианты ответа">
+    <div className="option-list" role="group" aria-label={t('test.optionsLabel')}>
       {q.options.map(o => (
-        <button key={o.id} className={optionClass(o.id)} onClick={() => toggle(o.id)} disabled={revealed}>
+        <button key={o.id} className={optionClass(o.id)} onClick={() => toggle(o.id)} disabled={revealed} aria-pressed={selected?.includes(o.id) ?? false}>
           <span className="key" aria-hidden="true">{o.id.toUpperCase()}</span>
           <span className="lab grow">{o.label}</span>
-          {revealed && q.correct.includes(o.id) && <span style={{ color: 'var(--accent)', fontWeight: 700 }}>✓</span>}
-          {revealed && !q.correct.includes(o.id) && selected?.includes(o.id) && <span style={{ color: 'var(--bad)' }}>✗</span>}
+          {revealed && q.correct.includes(o.id) && <svg className="option-state" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-label={t('test.correctOption')}><path d="m5 12 4 4L19 6" /></svg>}
+          {revealed && !q.correct.includes(o.id) && selected?.includes(o.id) && <svg className="option-state" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-label={t('test.incorrectOption')}><path d="m7 7 10 10M17 7 7 17" /></svg>}
         </button>
       ))}
     </div>

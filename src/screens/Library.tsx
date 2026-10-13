@@ -1,67 +1,107 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { cards } from '../data/cards';
-import { groups, domainById } from '../data/taxonomy';
+import { Link, useSearchParams } from 'react-router-dom';
+import { cards, cardById } from '../data/cards';
+import { groups } from '../data/taxonomy';
+import { localizeCards } from '../i18n/cardOverrides';
+import { useLanguage } from '../state/language';
 import { useStore } from '../state/store';
+import type { TrainingCard } from '../types';
 
 export function Library() {
   const { state } = useStore();
-  const [group, setGroup] = useState<string>('all');
+  const { t, lang, groupTitle, domainTitle } = useLanguage();
+  void lang;
+  const [params, setParams] = useSearchParams();
+  const rawGroup = params.get('f') ?? 'all';
+  const group = rawGroup === 'all' || groups.some(g => g.id === rawGroup) ? rawGroup : 'all';
   const [q, setQ] = useState('');
 
   const list = useMemo(() => {
-    let l = cards;
+    let l = localizeCards(cards, lang);
     if (group !== 'all') l = l.filter(c => c.group === group);
     if (q.trim()) {
       const s = q.trim().toLowerCase();
-      l = l.filter(c =>
-        c.answer.toLowerCase().includes(s) ||
-        c.frontQuestion.toLowerCase().includes(s) ||
-        c.backInfo.toLowerCase().includes(s),
-      );
+      l = l.filter(c => {
+        const en = cardById[c.id];
+        return (
+          c.answer.toLowerCase().includes(s) ||
+          c.frontQuestion.toLowerCase().includes(s) ||
+          c.backInfo.toLowerCase().includes(s) ||
+          (en != null && en !== c && (
+            en.frontQuestion.toLowerCase().includes(s) ||
+            en.backInfo.toLowerCase().includes(s)
+          ))
+        );
+      });
     }
     return [...l].sort((a, b) => a.answer.localeCompare(b.answer));
-  }, [group, q]);
+  }, [group, q, lang]);
 
   return (
-    <div className="screen">
-      <header className="screen-head">
-        <h1 className="screen-title">Все<br />карточки</h1>
-        <span className="screen-count">{String(list.length).padStart(3, '0')}</span>
-      </header>
+    <div className="screen metrics-screen">
+      <section className="metrics-workspace">
+        <header className="metrics-head">
+          <h1>{t('metrics.title')}</h1>
+          <span role="status" aria-live="polite">{t('metrics.of', { a: list.length, b: cards.length })}</span>
+        </header>
+        <p className="metrics-intro">{t('metrics.intro')}</p>
+        <p style={{ marginTop: 12 }}>
+          <Link to="/groups" className="btn quiet">{t('metrics.viewGroups')}</Link>
+        </p>
 
-      <div className="filters" role="tablist" aria-label="Фильтр по группам">
-        <button role="tab" aria-selected={group === 'all'} className={`f-tab ${group === 'all' ? 'on' : ''}`} onClick={() => setGroup('all')}>All</button>
-        {groups.map(g => (
-          <button key={g.id} role="tab" aria-selected={group === g.id} className={`f-tab ${group === g.id ? 'on' : ''}`} onClick={() => setGroup(g.id)}>
-            {g.title}
-          </button>
-        ))}
-      </div>
-
-      <input className="search" value={q} onChange={e => setQ(e.target.value)} placeholder="Поиск: activation, RAG, SUS…" aria-label="Поиск карточек" />
-
-      <div className="li-grid" style={{ marginTop: 32 }}>
-        <div className="list">
-          {list.slice(0, Math.ceil(list.length / 2)).map((c, i) => <LiRow key={c.id} c={c} i={i} lvl={state.progress[c.id]?.level ?? 0} />)}
+        <div className="filters" aria-label={t('learn.filterByTopic')}>
+          <button aria-pressed={group === 'all'} className={`f-tab ${group === 'all' ? 'on' : ''}`} onClick={() => void setParams({})}>{t('learn.all')}</button>
+          {groups.map(g => (
+            <button key={g.id} aria-pressed={group === g.id} className={`f-tab ${group === g.id ? 'on' : ''}`} onClick={() => void setParams({ f: g.id })}>
+              {groupTitle(g.id)}
+            </button>
+          ))}
         </div>
-        <div className="list">
-          {list.slice(Math.ceil(list.length / 2)).map((c, i) => <LiRow key={c.id} c={c} i={Math.ceil(list.length / 2) + i} lvl={state.progress[c.id]?.level ?? 0} />)}
+
+        <div className="metrics-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" />
+          </svg>
+          <label className="sr-only" htmlFor="metric-search">{t('metrics.searchLabel')}</label>
+          <input id="metric-search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('metrics.searchPh')} />
+          {q && <button type="button" onClick={() => setQ('')} aria-label={t('metrics.clearSearch')}>{t('metrics.clear')}</button>}
         </div>
-      </div>
+
+        {list.length === 0 ? (
+          <div className="metrics-empty">
+            <h2>{t('metrics.noMatch')}</h2>
+            <p>{t('metrics.tryBroader')}</p>
+            <button className="btn quiet" onClick={() => { setQ(''); void setParams({}); }}>{t('metrics.showAll')}</button>
+          </div>
+        ) : (
+          <div className="metrics-list">
+            {list.map((c, i) => <MetricRow key={c.id} c={c} i={i} lvl={state.progress[c.id]?.level ?? 0} />)}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
 
-function LiRow({ c, i, lvl }: { c: { id: string; answer: string; frontQuestion: string; category: string }; i: number; lvl: number }) {
+function MetricRow({ c, i, lvl }: { c: TrainingCard; i: number; lvl: number }) {
+  const { t, domainTitle } = useLanguage();
   return (
-    <Link to={`/metric/${c.id}`} className="li li-link">
-      <span className="li-num">{String(i + 1).padStart(2, '0')}</span>
-      <span className="grow">
-        <span className="li-name">{c.answer}</span>
-        <div className="li-meta">{c.frontQuestion}</div>
+    <Link to={`/metric/${c.id}`} className="metric-index-row" aria-label={t('metrics.open', { name: c.answer })}>
+      <span className="metric-index-num">{String(i + 1).padStart(3, '0')}</span>
+      <span className="metric-index-copy">
+        <span className="metric-index-name">{c.answer}</span>
+        <span className="metric-index-question">{c.frontQuestion}</span>
+        <span className="metric-index-meta">
+          <span className="metric-index-topic">{domainTitle(c.category)}</span>
+          <span className="metric-index-status">
+            <span className="metric-index-level">{t(`level.${c.level}` as string)}</span>
+            {lvl >= 5 && <span className="metric-mastered">{t('metrics.mastered')}</span>}
+          </span>
+        </span>
       </span>
-      <span className="li-right">{domainById[c.category]?.title ?? c.category}{lvl >= 5 ? ' · ✓' : ''}</span>
+      <svg className="metric-index-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M5 12h14M14 7l5 5-5 5" />
+      </svg>
     </Link>
   );
 }
